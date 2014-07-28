@@ -1,0 +1,37 @@
+;;Color Theme.
+(load-theme 'wombat t)
+
+;; Enable line numbers.
+(global-linum-mode 1)
+
+;; Enable column number mode.
+(setq column-number-mode t)
+
+;; Add one-space separation between line numbers and buffer.
+(setq-default linum-format "%d  ")
+
+;; Do not make backup files.
+(setq make-backup-files nil)
+
+;; Set 4-char wide TAB.
+(setq-default tab-width 4)
+;; Force use spaces for TAB.
+(setq-default indent-tabs-mode nil)
+
+;; Set indent style for C.
+(setq c-default-style "k&r"
+      c-basic-offset 4)
+
+;; Highlight columns that go beyond 80.
+(require 'whitespace)
+(setq whitespace-style '(face empty tabs lines-tail trailing))
+(global-whitespace-mode t)
+
+;; Add package directory.
+(add-to-list 'load-path "~/.emacs.d/")
+
+;; Enable auto-complete-mode.
+;; Source: https://github.com/auto-complete/auto-complete
+;;(require 'auto-complete-config)
+;;(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+;;(ac-config-default)

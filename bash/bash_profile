@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# echo "Loading '${HOME}/.bash_profile'..."
+
+# Do not put duplicate lines in bash_history
+# See bash(1) for more options
+export HISTCONTROL=ignoredups
+# ... Ignore same successive entries in bash_history
+export HISTCONTROL=ignoreboth
+
+# Enable directory and file color highlighting
+export CLICOLOR=1
+export LSCOLORS=FxCxBxDxExegedabagacad
+
+# Get hostname from computer
+PS1="[$(scutil --get ComputerName): \W]\\$ "
+
+# Pretty colors!
+export TERM=xterm-256color
+
+# Load PATH(s)
+source ~/.profile
+
+# Load aliases
+source ~/.bashrc
+
+#
+#- end
