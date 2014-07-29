@@ -5,69 +5,169 @@ filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-" Manage Vundle with Vundle.
+"------------------------------------------------------------------
+" INSTALLED PLUGINS
+"------------------------------------------------------------------
+" vim plugin manager
 Plugin 'gmarik/Vundle.vim'
-" ---------------------------------
-" Additonal Plugins installed here:
-" ---------------------------------
-" general syntax checker
-Plugin 'scrooloose/syntastic'
-" add-on to netrw browser
-Plugin 'tpope/vim-vinegar'
 " statusbar/tabline
 Plugin 'bling/vim-airline'
+" add-on to netrw browser
+Plugin 'tpope/vim-vinegar'
+" general syntax checker
+Plugin 'scrooloose/syntastic'
+" insert mode tab completions
+Plugin 'ervandew/supertab'
+" python code completion
+Plugin 'davidhalter/jedi-vim'
+" git wrapper
+Plugin 'tpope/vim-fugitive'
 
 call vundle#end()
+
+
+" Enable filetype detection and loading plugin/indent files.
 filetype plugin indent on
+" Enable syntax highlighting.
+syntax enable
 
-" To use plugin indent changes, instead use:
-" filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
+"------------------------------------------------------------------
+" VIM OPTION CONFIGURATIONS
+"------------------------------------------------------------------
 
-
-" ----------------------------------
-" Non-Plugin configuration settings:
-" ----------------------------------
-" Set to support 256 colorschemes.
-set t_Co=256
-
-" Set colorscheme.
-colorscheme Tomorrow-Night-Eighties
-syntax on
-
-" Add line numbers.
-set number
-
-" Set column highlight at 80 char.
-set colorcolumn=80
-
+" Copy indent from current line when starting new line.
+set autoindent
+" Enable backspace in insert-mode.
+set backspace=indent,eol,start
+" Remove i from vim search autocomplete.
+set complete-=i
 " Set tabs to 4 spaces.
 set tabstop=4
 set shiftwidth=4
 set expandtab
 
+" Remove octal number format recognition (for 00, 01,...).
+set nrformats-=octal
+
+" Do timeout on terminal key codes.
+set ttimeout
+" Timeout after 100ms.
+set ttimeoutlen=100
+
+" Start incremental searching before <enter>.
+set incsearch
+" Use <C-L> to clear the highlighting of :set hlsearch.
+if maparg('<C-L>', 'n') ==# ''
+    nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
+endif
+
+" Always enable status line.
+set laststatus=2
+" Show info about current cmd on status line.
+set showcmd
+" Enable command line completion to expand to menu.
+set wildmenu
+" Add line numbers.
+set number
+" Set column highlight at 80 char.
+set colorcolumn=80
+
+" Always show line(s) above/below cursor.
+if !&scrolloff
+    set scrolloff=1
+endif
+if !&sidescrolloff
+    set sidescrolloff=5
+endif
+" Display as many lines as possible.
+set display+=lastline
+
+" Makes :set list (visible whitespace) prettier.
+if &listchars ==# 'eol:$'
+    set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
+endif
+
+" Auto read file again if changed outside of vim.
+set autoread
+" Support mac file formats.
+set fileformats+=mac
+
+" Store 1000 history entries.
+set history=1000
+" Save global variables.
+if !empty(&viminfo)
+    set viminfo^=!
+endif
+" Do not store current options in session.
+set sessionoptions-=options
+
 " Enable code folding.
 augroup vimrc
     au BufReadPre * setlocal foldmethod=indent
     au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
-augroup END    
+augroup END
 set foldlevel=99
 
-" Specify syntax checkers for Python ('flake8', 'pyflakes', 'pylint',
-" 'python').
-" let g:syntactic_python_checkers = ['pylint']
+" Set to support 256 colorschemes.
+set t_Co=256
+" Set colorscheme.
+colorscheme Tomorrow-Night-Eighties
 
-" vim-airline configurations.
-set laststatus=2
-let g:airline#extensions#tabline#enabled=1
-let g:airline_powerline_fonts=1
+
+"------------------------------------------------------------------
+" KEY MAPPINGS
+"------------------------------------------------------------------
+
+" Remap <ESC> key.
+inoremap ii <esc>
+
+" Avoid accidental <C-U> (cannot undo delete)
+inoremap <C-U> <C-G>u<C-U>
+
+
+"------------------------------------------------------------------
+" PLUGIN CONFIGURATIONS
+"------------------------------------------------------------------
+
+" Load matchit.vim only if no newer version installed.
+if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
+    runtime! macros/matchit.vim
+endif
+
+" vim-airline configurations:
+"----------------------------------
+" Use powerline patched fonts.
+let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
+" Enable tabline for buffers.
+let g:airline#extensions#tabline#enabled = 1
+" Display buffer number on tabline.
+let g:airline#extensions#tabline#tab_nr_type = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline#extensions#tabline#show_tab_type = 1
+" Change airline color theme.
+"let g:airline_theme='luna'
+" Add datetime to section_b (git info)
+" let g:airline_section_b = '%{strftime("%c")}'
+" Enable syntastic integration.
+let g:airline#extensions#syntastic#enabled = 1
+" Enable fugitive integration
+let g:airline#extensions#branch#enabled = 1
+
+" syntastic: Specify syntax checkers and ignore rules.
+let g:syntactic_python_checkers = ['flake8']
+let g:syntastic_python_flake8_args='--ignore=E501,E225'
+
+" supertab: specify completion type.
+let g:SuperTabDefaultCompletionType = "context"
+
+" jedi-vim configurations:
+"----------------------------------
+" Disable jedi auto-complete.
+let g:jedi#popup_on_dot = 0
+" Force Python version.
+let g:jedi#force_py_version = 3
+" Open docs in split pane.
+let g:jedi#use_splits_not_buffers = "top"
