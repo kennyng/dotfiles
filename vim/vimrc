@@ -46,13 +46,15 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 
+" Enable unicode encoding.
+set encoding=utf-8
 " Remove octal number format recognition (for 00, 01,...).
 set nrformats-=octal
 
 " Do timeout on terminal key codes.
 set ttimeout
-" Timeout after 100ms.
-set ttimeoutlen=100
+" Timeout after 50ms.
+set ttimeoutlen=50
 
 " Start incremental searching before <enter>.
 set incsearch
@@ -149,8 +151,6 @@ let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#show_tab_type = 1
 " Change airline color theme.
 "let g:airline_theme='luna'
-" Add datetime to section_b (git info)
-" let g:airline_section_b = '%{strftime("%c")}'
 " Enable syntastic integration.
 let g:airline#extensions#syntastic#enabled = 1
 " Enable fugitive integration
@@ -158,7 +158,8 @@ let g:airline#extensions#branch#enabled = 1
 
 " syntastic: Specify syntax checkers and ignore rules.
 let g:syntactic_python_checkers = ['flake8']
-let g:syntastic_python_flake8_args='--ignore=E501,E225'
+let g:syntastic_python_flake8_args = '--ignore=E501'
+let g:syntastic_python_python_exec = 'python3'
 
 " supertab: specify completion type.
 let g:SuperTabDefaultCompletionType = "context"
@@ -169,5 +170,5 @@ let g:SuperTabDefaultCompletionType = "context"
 let g:jedi#popup_on_dot = 0
 " Force Python version.
 let g:jedi#force_py_version = 3
-" Open docs in split pane.
-let g:jedi#use_splits_not_buffers = "top"
+" let g:jedi#use_tabs_not_buffers = 0
+" let g:jedi#use_splits_not_buffers = 'bottom'
