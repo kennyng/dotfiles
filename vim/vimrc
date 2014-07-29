@@ -156,10 +156,15 @@ let g:airline#extensions#syntastic#enabled = 1
 " Enable fugitive integration
 let g:airline#extensions#branch#enabled = 1
 
-" syntastic: Specify syntax checkers and ignore rules.
+" syntastic configurations:
+"----------------------------------
+" Specify syntax checkers and ignore rules.
 let g:syntactic_python_checkers = ['flake8', 'python']
 let g:syntastic_python_flake8_args = '--ignore=E501'
 let g:syntastic_python_python_exec = 'python3'
+" Change highlight colors.
+highlight SpellBad ctermfg=015 ctermbg=203 guifg=#ffffff guibg=#ff5f87
+highlight SpellCap ctermfg=233 ctermbg=147 guifg=#2d2d2d guibg=#afafff
 
 " supertab: specify completion type.
 let g:SuperTabDefaultCompletionType = "context"
