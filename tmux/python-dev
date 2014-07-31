@@ -1,0 +1,8 @@
+# tmux session layout for python development.
+
+new -s python-dev     # Create new session named 'python-dev'
+selectp -t 1
+splitw -h -p 28         # Split pane 1 vertically by 28% 
+selectp -t 2
+splitw -v -p 70         # Split pane 2 horizontally by 70%
+selectp -t 1

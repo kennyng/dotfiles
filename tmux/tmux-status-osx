@@ -1,0 +1,45 @@
+#!/bin/bash
+###########################################################################
+# tmux-status-osx
+#--------------------
+# Status bar customizations for tmux (MacOSX):
+#   + iTunes current track on statusbar
+#
+# Requires patched fonts <https://github.com/Lokaltog/powerline-fonts>.
+###########################################################################
+
+width=${1}
+#min=80
+adequate=160
+
+# Resize status bar elements depending on window width.
+if [[ "$width" -ge "$adequate" ]]; then
+itunes_track=$(osascript << EOF
+if appIsRunning("iTunes") then
+    tell app "iTunes" to if player state is playing then get the name of the current track
+end if
+
+on appIsRunning(appName)
+    tell app "System Events" to (name of processes) contains appName
+end appIsRunning
+EOF)
+fi
+
+if test "x$itunes_track" != "x"; then
+itunes_artist=$(osascript << EOF
+if appIsRunning("iTunes") then
+    tell app "iTunes" to if player state is playing then get the artist of the current track
+end if
+
+on appIsRunning(appName)
+    tell app "System Events" to (name of processes) contains appName
+end appIsRunning
+EOF)
+fi
+
+if [[ -n "$itunes_track" ]] || [[ -n "$itunes_artist" ]]; then
+    itunes="#[fg=colour31,bold] ♫ $itunes_artist - $itunes_track"
+fi
+
+# Resulting status-right format.
+echo $itunes
