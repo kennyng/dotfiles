@@ -15,9 +15,6 @@ export LSCOLORS=FxCxBxDxExegedabagacad
 # Get hostname from computer
 PS1="[$(scutil --get ComputerName): \W]\\$ "
 
-# Pretty colors!
-export TERM=xterm-256color
-
 # Load PATH(s)
 source ~/.profile
 

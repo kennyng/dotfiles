@@ -53,15 +53,14 @@ set nrformats-=octal
 
 " Do timeout on terminal key codes.
 set ttimeout
-" Timeout after 50ms.
-set ttimeoutlen=50
+" Timeout after 100ms.
+set ttimeoutlen=100
+
+" Allow leaving/switching modified buffers.
+" set hidden
 
 " Start incremental searching before <enter>.
 set incsearch
-" Use <C-L> to clear the highlighting of :set hlsearch.
-if maparg('<C-L>', 'n') ==# ''
-    nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
-endif
 
 " Always enable status line.
 set laststatus=2
@@ -96,6 +95,10 @@ set fileformats+=mac
 
 " Store 1000 history entries.
 set history=1000
+" Set max number of tabs.
+if &tabpagemax < 20
+    set tabpagemax=20
+endif
 " Save global variables.
 if !empty(&viminfo)
     set viminfo^=!
@@ -117,14 +120,38 @@ colorscheme Tomorrow-Night-Eighties
 
 
 "------------------------------------------------------------------
+" VIM FUNCTIONS
+"------------------------------------------------------------------
+
+" diff current buffer with original/saved version.
+function! s:DiffWithSaved()
+    let filetype=&ft
+    diffthis
+    vnew | r # | normal! 1Gdd
+    diffthis
+    exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
+endfunction
+com! Diffbuf call s:DiffWithSaved()
+
+
+"------------------------------------------------------------------
 " KEY MAPPINGS
 "------------------------------------------------------------------
 
 " Remap <ESC> key.
-inoremap ii <esc>
+inoremap jk <esc>
+inoremap kj <esc>
 
 " Avoid accidental <C-U> (cannot undo delete)
 inoremap <C-U> <C-G>u<C-U>
+
+" Use <C-L> to clear the highlighting of :set hlsearch.
+if maparg('<C-L>', 'n') ==# ''
+    nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
+endif
+
+" Mappings for opening files in tabs.
+command -nargs=1 -complete=file_in_path TT tabfind <args>
 
 
 "------------------------------------------------------------------
@@ -145,12 +172,14 @@ if !exists('g:airline_symbols')
 endif
 " Enable tabline for buffers.
 let g:airline#extensions#tabline#enabled = 1
-" Display buffer number on tabline.
-let g:airline#extensions#tabline#tab_nr_type = 1
-let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline#extensions#tabline#tab_nr_type = 0
 let g:airline#extensions#tabline#show_tab_type = 1
+" Disable buffers for single tab on tabline.
+let g:airline#extensions#tabline#show_buffers = 0
+let g:airline#extensions#tabline#close_symbol = ''
 " Change airline color theme.
-"let g:airline_theme='luna'
+let g:airline_theme='sol'
 " Enable syntastic integration.
 let g:airline#extensions#syntastic#enabled = 1
 " Enable fugitive integration
@@ -176,4 +205,4 @@ let g:jedi#popup_on_dot = 0
 " Force Python version.
 let g:jedi#force_py_version = 3
 " let g:jedi#use_tabs_not_buffers = 0
-" let g:jedi#use_splits_not_buffers = 'bottom'
+let g:jedi#use_splits_not_buffers = 'right'
