@@ -172,11 +172,11 @@ if !exists('g:airline_symbols')
 endif
 " Enable tabline for buffers.
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail'
+" let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline#extensions#tabline#tab_nr_type = 0
 let g:airline#extensions#tabline#show_tab_type = 1
 " Disable buffers for single tab on tabline.
-let g:airline#extensions#tabline#show_buffers = 1
+let g:airline#extensions#tabline#show_buffers = 0
 let g:airline#extensions#tabline#close_symbol = ''
 " Change airline color theme.
 let g:airline_theme='sol'
