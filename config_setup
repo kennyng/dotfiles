@@ -1,0 +1,89 @@
+#!/bin/bash
+
+while getopts Abetv name
+do
+    case $name in
+        A)
+            bash_opt=1;
+            emacs_opt=1;
+            tmux_opt=1;
+            vim_opt=1;;
+        b)bash_opt=1;;
+        e)emacs_opt=1;;
+        t)tmux_opt=1;;
+        v)vim_opt=1;;
+        *)echo "usage: config_setup [-Abetv] <absolute_path_to_repo>";;
+    esac
+done
+
+shift $(($OPTIND -1))
+SRC_PATH=$1
+
+if [[ -n $bash_opt ]]; then
+    bash_dir=${SRC_PATH%%/}/bash
+    bash_conf=${bash_dir%%/}/bash_profile
+    bash_conf_symlink=~/.bash_profile
+
+    if [[ -f $bash_conf_symlink ]]; then
+        echo "error: '$bash_conf_symlink' already exists."
+    else
+        ln -s "$bash_conf" "$bash_conf_symlink"
+        echo "Created symbolic link: $bash_conf_symlink"
+    fi
+fi
+
+if [[ -n $emacs_opt ]]; then
+    emacs_dir=${SRC_PATH%%/}/emacs
+    emacs_conf=${emacs_dir%%/}/emacs
+    emacs_conf_symlink=~/.emacs
+
+    if [[ -f $emacs_conf_symlink ]]; then
+        echo "error: '$emacs_conf_symlink' already exists."
+    else
+        ln -s "$emacs_conf" "$emacs_conf_symlink"
+        echo "Created symbolic link: $emacs_conf_symlink"
+    fi
+fi
+
+if [[ -n $tmux_opt ]]; then
+    tmux_dir=${SRC_PATH%%/}/tmux
+    tmux_conf=${tmux_dir%%/}/tmux.conf
+    tmux_dir_symlink=~/.tmux
+    tmux_conf_symlink=~/.tmux.conf
+
+    if [[ -d $tmux_dir_symlink ]]; then
+        echo "error: '$tmux_dir_symlink' already exists."
+    else
+        ln -s "$tmux_dir" "$tmux_dir_symlink"
+        echo "Created symbolic link: $tmux_dir_symlink"
+    fi
+
+    if [[ -f $tmux_conf_symlink ]]; then
+        echo "error: '$tmux_conf_symlink' already exists."
+    else
+        ln -s "$tmux_conf" "$tmux_conf_symlink"
+        echo "Created symbolic link: $tmux_conf_symlink"
+    fi
+fi
+
+if [[ -n $vim_opt ]]; then
+    vim_dir=${SRC_PATH%%/}/vim
+    vim_conf=${vim_dir%%/}/vimrc
+    vim_colors=${vim_dir%%/}/colors
+    vim_conf_symlink=~/.vimrc
+    vim_colors_symlink=~/.vim/colors
+
+    if [[ -f $vim_conf_symlink ]]; then
+        echo "error: '$vim_conf_symlink' already exists."
+    else
+        ln -s "$vim_conf" "$vim_conf_symlink"
+        echo "Created symbolic link: $vim_conf_symlink"
+    fi
+
+    if [[ -d $vim_colors_symlink ]]; then
+        echo "error: '$vim_colors_symlink' already exists."
+    else
+        ln -s "$vim_colors" "$vim_colors_symlink"
+        echo "Created symbolic link: $vim_colors_symlink"
+    fi
+fi
