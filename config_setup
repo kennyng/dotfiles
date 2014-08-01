@@ -1,4 +1,11 @@
 #!/bin/bash
+###########################################################################
+# config_setup
+# -------------
+# Create symbolic links to configuration files.
+# usage: ./config_setup [-Abetv] <absolute_path_to_repo>
+#
+###########################################################################
 
 while getopts Abetv name
 do
@@ -12,7 +19,7 @@ do
         e)emacs_opt=1;;
         t)tmux_opt=1;;
         v)vim_opt=1;;
-        *)echo "usage: config_setup [-Abetv] <absolute_path_to_repo>";;
+        *)echo "usage: ./config_setup [-Abetv] <absolute_path_to_repo>";;
     esac
 done
 
