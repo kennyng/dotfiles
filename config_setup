@@ -35,7 +35,7 @@ if [[ -n $bash_opt ]]; then
         echo "error: '$bash_conf_symlink' already exists."
     else
         ln -s "$bash_conf" "$bash_conf_symlink"
-        echo "Created symbolic link: $bash_conf_symlink"
+        echo "> created symbolic link: $bash_conf_symlink"
     fi
 fi
 
@@ -48,7 +48,7 @@ if [[ -n $emacs_opt ]]; then
         echo "error: '$emacs_conf_symlink' already exists."
     else
         ln -s "$emacs_conf" "$emacs_conf_symlink"
-        echo "Created symbolic link: $emacs_conf_symlink"
+        echo "> created symbolic link: $emacs_conf_symlink"
     fi
 fi
 
@@ -62,14 +62,14 @@ if [[ -n $tmux_opt ]]; then
         echo "error: '$tmux_dir_symlink' already exists."
     else
         ln -s "$tmux_dir" "$tmux_dir_symlink"
-        echo "Created symbolic link: $tmux_dir_symlink"
+        echo "> created symbolic link: $tmux_dir_symlink"
     fi
 
     if [[ -f $tmux_conf_symlink ]]; then
         echo "error: '$tmux_conf_symlink' already exists."
     else
         ln -s "$tmux_conf" "$tmux_conf_symlink"
-        echo "Created symbolic link: $tmux_conf_symlink"
+        echo "> created symbolic link: $tmux_conf_symlink"
     fi
 fi
 
@@ -77,20 +77,26 @@ if [[ -n $vim_opt ]]; then
     vim_dir=${SRC_PATH%%/}/vim
     vim_conf=${vim_dir%%/}/vimrc
     vim_colors=${vim_dir%%/}/colors
+    vim_bundle=~/.vim/bundle
     vim_conf_symlink=~/.vimrc
     vim_colors_symlink=~/.vim/colors
+
+    if [[ ! -d $vim_bundle ]]; then
+        mkdir -p "$vim_bundle"
+        echo "> created directory(ies): $vim_bundle"
+    fi
 
     if [[ -f $vim_conf_symlink ]]; then
         echo "error: '$vim_conf_symlink' already exists."
     else
         ln -s "$vim_conf" "$vim_conf_symlink"
-        echo "Created symbolic link: $vim_conf_symlink"
+        echo "> created symbolic link: $vim_conf_symlink"
     fi
 
     if [[ -d $vim_colors_symlink ]]; then
         echo "error: '$vim_colors_symlink' already exists."
     else
         ln -s "$vim_colors" "$vim_colors_symlink"
-        echo "Created symbolic link: $vim_colors_symlink"
+        echo "> created symbolic link: $vim_colors_symlink"
     fi
 fi
