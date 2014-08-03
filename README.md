@@ -1,20 +1,23 @@
 # dotfiles
 
-Portable configurations for bash, emacs, tmux, and vim that I use daily for development on Mac OSX and remote Linux servers.
+Portable dotfiles that I use for development on Mac OSX and remote Linux servers.
 
-+ bash:
-    + .bash_profile - Basic configurations and commonly-used aliases for bash shell. It sources `~/.profile` (where I put PATH environment stuff) and `~/.bashrc` (where I put local aliases).
+This repository contains configurations for the following:
++ [Bash](https://www.gnu.org/software/bash/) (GNU Bourne-Again Shell, 3.2+):
+    + `.bash_profile` - Sources `~/.profile` (not committed file where I put PATH and other environment stuff) and `~/.bashrc.
+    + `.bashrc` - Bash shell configurations; sources `.bashrc.d/`.
+    + `.bashrc.d/` - Contains scripts, functions, and aliases for Bash shell.
 
-+ emacs:
-    + .emacs - Minimal configurations for emacs (use emacs only to occasionally play [GNU Go](http://www.gnu.org/software/gnugo/) since switching to vim).
++ [emacs](http://www.gnu.org/software/emacs/) (GNU Emacs, text editor, 22+):
+    + `.emacs` - Minimal configurations for emacs (use emacs only to occasionally play [GNU Go](http://www.gnu.org/software/gnugo/) since switching to vim).
 
-+ tmux (1.8+):
-    + .tmux.conf - Intuitive configurations, easy window/pane management, improved key bindings, and status bar customizations for tmux.
-    + tmux/ - Includes session profiles, status bar customization scripts, and OSX-specific configurations.
++ [tmux](http://tmux.sourceforge.net/) (Terminal multiplexer, 1.8+):
+    + `.tmux.conf` - Intuitive configurations, easy window/pane management, improved key bindings, and status bar customizations for tmux.
+    + `tmux/` - Includes session profiles, status bar customization scripts, and OSX-specific configurations.
 
-+ vim (7+):
-    + .vimrc - Sensible configurations, key (re)mappings, and plugins for vim. Plugins are managed using [Vundle](http://github.com/gmarik/vundle).
-    + vim/colors - Some colorschemes that I like.
++ [Vim](http://www.vim.org/) (Vi IMproved, text editor, 7+):
+    + `.vimrc` - Sensible configurations, key (re)mappings, and plugins for vim. Plugins are managed using [Vundle](http://github.com/gmarik/vundle).
+    + `vim/colors` - Some colorschemes that I like.
 
 ## usage
 
@@ -23,15 +26,15 @@ After cloning this git repository, symbolic links to the configuration files can
 ```sh
 $ git clone https://github.com/kennyng/dotfiles
 $ cd <path-to-git-repo>
-$ ./config_setup [-b][-e][-t][-v][-A]  <absolute-path-to-git-repo>
+$ ./config_setup [-betvA]
 ```
 
 `config_setup` **options** (any combination of the following):
-+ `-b`    (bash only)
++ `-b`    (Bash only)
 + `-e`    (emacs only)
 + `-t`    (tmux only)
-+ `-v`    (vim only)
-+ `-A`    (all configurations; `./config_setup -A` equivalent to `./config_setup -b -e -t -v`)
++ `-v`    (Vim only)
++ `-A`    (all configurations; `./config_setup -A` equivalent to `./config_setup -betv`)
 
 **Note**:
 + No symbolic links are created by `config_setup` if [file/directory/symbolic link] name already exists. Remove existing before running `config_setup`.

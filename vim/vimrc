@@ -114,8 +114,8 @@ augroup END
 set foldlevel=99
 
 " Toggle paste option and show visual feedback in status.
-nnoremap <F2> :set invpaste paste?<CR>
-set pastetoggle=<F2>
+nnoremap <F8> :set invpaste paste?<CR>
+set pastetoggle=<F8>
 set showmode
 
 " Set to support 256 colorschemes.

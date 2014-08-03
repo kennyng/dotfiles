@@ -56,7 +56,7 @@ shopt -u hostcomplete
 shopt -u sourcepath
 
 # Options for Bash 4.0+.
-if ((BASH_VERSION[0] >= 4)) ; then
+if [[ $BASH_VERSINFO -ge '4' ]] ; then
     # Provide warning about stopped jobs when exiting.
     shopt -s checkjobs
     # Autocorrect paths during completion.

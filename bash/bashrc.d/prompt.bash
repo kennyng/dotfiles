@@ -19,61 +19,53 @@ prompt() {
                 PROMPT_DIRTRIM=4
             fi
 
-            # Set a fancy prompt (non-color, unless we know we "want" color).
-            case "$TERM" in
-                xterm-color) color_prompt=yes;;
-                *-256color) color_prompt=yes;;
-            esac
-
-            # Uncomment for a colored prompt, if the terminal has the capability; turned
-            # off by default to not distract the user: the focus in a terminal window
-            # should be on the output of commands, not on the prompt.
-            #force_color_prompt=yes
-
-            if [[ -n $force_color_prompt ]] ; then
-                if [[ -x /usr/bin/tput ]] && tput setaf 1 >&/dev/null; then
-                    # We have color support; assume it's compliant with Ecma-48
-                    # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-                    # a case would tend to support setf rather than setaf.)
-                    color_prompt=yes
-                else
-                    color_prompt=
-                fi
+            local color_prompt
+            if [[ -x /usr/bin/tput ]] && tput setaf 1 >&/dev/null; then
+                # We have color support; assume it's compliant with Ecma-48
+                # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+                # a case would tend to support setf rather than setaf.)
+                color_prompt=yes
+            else
+                color_prompt=
             fi
 
+            local username=$(whoami | tr '[:upper:]' '[:lower:]')
+            
             # Format prompt depending on color support.
-            if [[ $color_prompt = yes ]]; then
-                local -i colors=$( { tput co || tput colors } 2>/dev/null )
-                local reset=$( { tput me || tput sgr0 } 2>/dev/null )
-                local red; local green; local blue; local purple
-                local format
+            if [[ $color_prompt = 'yes' ]]; then
+                local -i colors=$( {
+                    tput Co || tput colors
+                } 2>/dev/null )
+                local reset=$( {
+                    tput me || tput sgr0
+                } 2>/dev/null )
 
                 # Determine how many colors are supported.
                 if ((colors == 256)) ; then
-                    green=$({tput setaf 10} 2>/dev/null)
-                    red=$({tput setaf 196} 2>/dev/null)
-                    purple=$({tput setaf 141} 2>/dev/null)
-                    blue=$({tput setaf 33} 2>/dev/null)
+                    local green=$(tput setaf 40 2>/dev/null)
+                    local red=$(tput setaf 196 2>/dev/null)
+                    local purple=$(tput setaf 141 2>/dev/null)
+                    local blue=$(tput setaf 39 2>/dev/null)
                 elif ((colors == 8)) ; then
-                    green=$({tput setaf 2 || tput bold || tput md} 2>/dev/null)
-                    red=$({tput setaf 1 || tput bold || tput md} 2>/dev/null)
-                    purple=$({tput setaf 5 || tput bold || tput md} 2>/dev/null)
-                    blue=$({tput setaf 4 || tput bold || tput md} 2>/dev/null)
+                    local green=$( {
+                        tput setaf 2 || tput bold || tput md
+                    } 2>/dev/null )
+                    local red=$( {
+                        tput setaf 1 || tput bold || tput md
+                    } 2>/dev/null )
+                    local purple=$( {
+                        tput setaf 5 || tput bold || tput md
+                    } 2>/dev/null)
+                    local blue=$( {
+                        tput setaf 4 || tput bold || tput md
+                    } 2>/dev/null)
                 fi
+                local format='[\['"$green"'\]'"$username"'@\h\['"$reset"'\]:\['"$blue"'\]\w\['$reset'\]]'
 
-                if (( EUID == 0 )) ; then
-                    format='\['"$red"'\][\u@\h\['"$reset"'\]:\['"$green"'\]\w]\['$reset'\]'
-                elif [[ $SUDO_USER ]]; then
-                    format='\['"$purple"'\][\u@\h\['"$reset"'\]:\['"$green"'\]\w]\['$reset'\]'
-                else
-                    format='\['"$blue"'\][\u@\h\['"$reset"'\]:\['"$green"'\]\w]\['$reset'\]'
-                fi
-
-                PS1="$format"'$(prompt git)$(prompt job)\$ '
+                PS1="$format"'\['"$purple"'\]$(prompt git)\['"$reset"'\]\['"$red"'\]$(prompt job)\['"$reset"'\]\n\$ '
             else
                 PS1='[[\u@\h:\w\]]$ '
             fi
-            unset color_prompt force_color_prompt
             ;;
 
         # Revert to simple inexpensive prompt.
