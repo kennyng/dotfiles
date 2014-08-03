@@ -1,25 +1,25 @@
 #!/bin/bash
-
-# echo "Loading '${HOME}/.bash_profile'..."
-
-# Do not put duplicate lines in bash_history
-# See bash(1) for more options
-export HISTCONTROL=ignoredups
-# ... Ignore same successive entries in bash_history
-export HISTCONTROL=ignoreboth
-
-# Enable directory and file color highlighting
-export CLICOLOR=1
-export LSCOLORS=FxCxBxDxExegedabagacad
-
-# Get hostname from computer
-PS1="[$(scutil --get ComputerName): \W]\\$ "
-
-# Load PATH(s)
-source ~/.profile
-
-# Load aliases
-source ~/.bashrc
-
+####################################################################
+# ~/.bash_profile
+# ----------------
+# Sources:
+#   ~/.profile - contains PATH and other environment variables.
+#   ~/.bashrc - contains bash shell configurations.
 #
-#- end
+# echo "Loading '${HOME}/.bash_profile'..."
+####################################################################
+
+# Check for Bash (<2.0).
+if [ ! "$BASH_VERSINFO" ] ; then
+    return
+fi
+
+# Source Bourne shell profile.
+if [[ -r $HOME/.profile ]] ; then
+    source "$HOME"/.profile
+fi
+
+# Source interactive Bash config.
+if [[ -r $HOME/.bashrc ]] ; then
+    source "$HOME"/.bashrc
+fi
