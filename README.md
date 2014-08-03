@@ -42,4 +42,4 @@ $ ./config_setup [-betvA]
 
 ## screenshot
 
-![screenshot of tmux status bar, vim colorscheme, and panes/windows/plugins](http://i.imgur.com/dDIJMxy.png?1 "screenshot")
+![screenshot of tmux status bar, vim colorscheme, bash prompt, and panes/windows/plugins](http://i.imgur.com/qyJwNcg.png?1 "screenshot")

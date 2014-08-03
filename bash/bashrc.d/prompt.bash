@@ -29,8 +29,6 @@ prompt() {
                 color_prompt=
             fi
 
-            local username=$(whoami | tr '[:upper:]' '[:lower:]')
-            
             # Format prompt depending on color support.
             if [[ $color_prompt = 'yes' ]]; then
                 local -i colors=$( {
@@ -42,7 +40,7 @@ prompt() {
 
                 # Determine how many colors are supported.
                 if ((colors == 256)) ; then
-                    local green=$(tput setaf 40 2>/dev/null)
+                    local green=$(tput setaf 47 2>/dev/null)
                     local red=$(tput setaf 196 2>/dev/null)
                     local purple=$(tput setaf 141 2>/dev/null)
                     local blue=$(tput setaf 39 2>/dev/null)
@@ -60,6 +58,7 @@ prompt() {
                         tput setaf 4 || tput bold || tput md
                     } 2>/dev/null)
                 fi
+                local username=$(whoami | tr '[:upper:]' '[:lower:]')
                 local format='[\['"$green"'\]'"$username"'@\h\['"$reset"'\]:\['"$blue"'\]\w\['$reset'\]]'
 
                 PS1="$format"'\['"$purple"'\]$(prompt git)\['"$reset"'\]\['"$red"'\]$(prompt job)\['"$reset"'\]\n\$ '
