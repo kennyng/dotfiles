@@ -113,6 +113,11 @@ augroup vimrc
 augroup END
 set foldlevel=99
 
+" Toggle paste option and show visual feedback in status.
+nnoremap <F2> :set invpaste paste?<CR>
+set pastetoggle=<F2>
+set showmode
+
 " Set to support 256 colorschemes.
 set t_Co=256
 " Set colorscheme.
