@@ -7,6 +7,11 @@
 #
 ###########################################################################
 
+# Check for Bash (>2.0).
+if [ ! "$BASH_VERSINFO" ] ; then
+    return
+fi
+
 while getopts Abetv name
 do
     case $name in
@@ -19,84 +24,125 @@ do
         e)emacs_opt=1;;
         t)tmux_opt=1;;
         v)vim_opt=1;;
-        *)echo "usage: ./config_setup [-Abetv] <absolute_path_to_repo>";;
+        *)echo "usage: ./config_setup [-Abetv]";;
     esac
 done
 
-shift $(($OPTIND -1))
-SRC_PATH=$1
+config_repo_path=$(pwd)
 
-if [[ -n $bash_opt ]]; then
-    bash_dir=${SRC_PATH%%/}/bash
-    bash_conf=${bash_dir%%/}/bash_profile
-    bash_conf_symlink=~/.bash_profile
+if [[ -n $bash_opt ]] ; then
+    echo "Configuring Bash..."
+    bash_dir=${config_repo_path%%/}/bash
+    bash_profile=${bash_dir%%/}/bash_profile
+    bashrc=${bash_dir%%/}/bashrc
+    bashrc_dir=${bash_dir%%/}/bashrc.d
+    bash_logout=${bash_dir%%/}/bash_logout
+    profile_symlink=$HOME/.bash_profile
+    bashrc_symlink=$HOME/.bashrc
+    bashrc_dir_symlink=$HOME/.bashrc.d
+    logout_symlink=$HOME/.bash_logout
 
-    if [[ -f $bash_conf_symlink ]]; then
-        echo "error: '$bash_conf_symlink' already exists."
+    if [[ -f $profile_symlink ]] ; then
+        echo "ERROR: '$profile_symlink' already exists."
     else
-        ln -s "$bash_conf" "$bash_conf_symlink"
-        echo "> created symbolic link: $bash_conf_symlink"
+        ln -s "$bash_profile" "$profile_symlink"
+        echo "> created symbolic link: $profile_symlink"
     fi
+    
+    if [[ -f $bashrc_symlink ]] ; then
+        echo "ERROR: '$bashrc_symlink' already exists."
+    else
+        ln -s "$bashrc" "$bashrc_symlink"
+        echo "> created symbolic link: $bashrc_symlink"
+    fi
+    if [[ -f $bashrc_dir_symlink ]] ; then
+        echo "ERROR: '$bashrc_dir_symlink' already exists."
+    else
+        ln -s "$bashrc_dir" "$bashrc_dir_symlink"
+        echo "> created symbolic link: $bashrc_dir_symlink"
+    fi
+    if [[ -f $logout_symlink ]] ; then
+        echo "ERROR: '$logout_symlink' already exists."
+    else
+        ln -s "$bash_logout" "$logout_symlink"
+        echo "> created symbolic link: $logout_symlink"
+    fi
+
+    unset bash_dir bash_profile bashrc bashrc_dir logout
+    unset profile_symlink bashrc_symlink bashrc_dir_symlink logout_symlink
+    unset bash_opt
 fi
 
-if [[ -n $emacs_opt ]]; then
-    emacs_dir=${SRC_PATH%%/}/emacs
+if [[ -n $emacs_opt ]] ; then
+    echo "Configuring emacs..."
+    emacs_dir=${config_repo_path%%/}/emacs
     emacs_conf=${emacs_dir%%/}/emacs
-    emacs_conf_symlink=~/.emacs
+    emacs_conf_symlink=$HOME/.emacs
 
     if [[ -f $emacs_conf_symlink ]]; then
-        echo "error: '$emacs_conf_symlink' already exists."
+        echo "ERROR: '$emacs_conf_symlink' already exists."
     else
         ln -s "$emacs_conf" "$emacs_conf_symlink"
         echo "> created symbolic link: $emacs_conf_symlink"
     fi
+    
+    unset emacs_dir emacs_conf emacs_conf_symlink emacs_opt
 fi
 
-if [[ -n $tmux_opt ]]; then
-    tmux_dir=${SRC_PATH%%/}/tmux
+if [[ -n $tmux_opt ]] ; then
+    echo "Configuring tmux..."
+    tmux_dir=${config_repo_path%%/}/tmux
     tmux_conf=${tmux_dir%%/}/tmux.conf
-    tmux_dir_symlink=~/.tmux
-    tmux_conf_symlink=~/.tmux.conf
+    tmux_dir_symlink=$HOME/.tmux
+    tmux_conf_symlink=$HOME/.tmux.conf
 
     if [[ -d $tmux_dir_symlink ]]; then
-        echo "error: '$tmux_dir_symlink' already exists."
+        echo "ERROR: '$tmux_dir_symlink' already exists."
     else
         ln -s "$tmux_dir" "$tmux_dir_symlink"
         echo "> created symbolic link: $tmux_dir_symlink"
     fi
 
-    if [[ -f $tmux_conf_symlink ]]; then
-        echo "error: '$tmux_conf_symlink' already exists."
+    if [[ -f $tmux_conf_symlink ]] ; then
+        echo "ERROR: '$tmux_conf_symlink' already exists."
     else
         ln -s "$tmux_conf" "$tmux_conf_symlink"
         echo "> created symbolic link: $tmux_conf_symlink"
     fi
+
+    unset tmux_dir tmux_conf tmux_dir_symlink tmux_conf_symlink tmux_opt
 fi
 
-if [[ -n $vim_opt ]]; then
-    vim_dir=${SRC_PATH%%/}/vim
+if [[ -n $vim_opt ]] ; then
+    echo "Configuring Vim..."
+    vim_dir=${config_repo_path%%/}/vim
     vim_conf=${vim_dir%%/}/vimrc
     vim_colors=${vim_dir%%/}/colors
-    vim_bundle=~/.vim/bundle
-    vim_conf_symlink=~/.vimrc
-    vim_colors_symlink=~/.vim/colors
+    vim_bundle=$HOME/.vim/bundle
+    vim_conf_symlink=$HOME/.vimrc
+    vim_colors_symlink=$HOME/.vim/colors
 
-    if [[ ! -d $vim_bundle ]]; then
+    if [[ ! -d $vim_bundle ]] ; then
         mkdir -p "$vim_bundle"
         echo "> created directory(ies): $vim_bundle"
     fi
 
-    if [[ -f $vim_conf_symlink ]]; then
-        echo "error: '$vim_conf_symlink' already exists."
+    if [[ -f $vim_conf_symlink ]] ; then
+        echo "ERROR: '$vim_conf_symlink' already exists."
     else
         ln -s "$vim_conf" "$vim_conf_symlink"
         echo "> created symbolic link: $vim_conf_symlink"
     fi
 
-    if [[ -d $vim_colors_symlink ]]; then
-        echo "error: '$vim_colors_symlink' already exists."
+    if [[ -d $vim_colors_symlink ]] ; then
+        echo "ERROR: '$vim_colors_symlink' already exists."
     else
         ln -s "$vim_colors" "$vim_colors_symlink"
         echo "> created symbolic link: $vim_colors_symlink"
     fi
+
+    unset vim_dir vim_conf vim_colors vim_bundle
+    unset vim_conf_symlink cim_colors_symlinks vim_opt
 fi
+
+unset config_repo_path
