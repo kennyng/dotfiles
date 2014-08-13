@@ -41,9 +41,13 @@ set autoindent
 set backspace=indent,eol,start
 " Remove i from vim search autocomplete.
 set complete-=i
-" Set tabs to 4 spaces.
-set tabstop=4
+" Set default indent to width 4.
 set shiftwidth=4
+set tabstop=4
+" For html and javascript, set indent to width 2.
+autocmd FileType html setlocal shiftwidth=2 tabstop=2
+autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
+" Use spaces instead of tab.
 set expandtab
 
 " Enable unicode encoding.
