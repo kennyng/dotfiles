@@ -50,6 +50,10 @@ autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
 " Use spaces instead of tab.
 set expandtab
 
+" Auto change working directory to inherit from current file.
+" set autochdir
+autocmd BufEnter * if expand("%:p:h") !~ '^/tmp' | silent! lcd %:p:h | endif
+
 " Enable unicode encoding.
 set encoding=utf-8
 " Remove octal number format recognition (for 00, 01,...).
