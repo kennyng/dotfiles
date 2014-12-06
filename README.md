@@ -6,16 +6,16 @@ This repository contains configurations for the following:
 + [Bash](https://www.gnu.org/software/bash/) (GNU Bourne-Again Shell, 3.2+):
     + `.bash_profile` - Sources `~/.profile` (not committed file where I put PATH and other environment stuff) and `~/.bashrc.
     + `.bashrc` - Bash shell configurations; sources `.bashrc.d/`.
-    + `.bashrc.d/` - Contains scripts, functions, and aliases for Bash shell.
+    + `.bashrc.d/` - Contains scripts, functions, completions, and aliases for Bash shell.
 
 + [emacs](http://www.gnu.org/software/emacs/) (GNU Emacs, text editor, 22+):
-    + `.emacs` - Minimal configurations for emacs (use emacs only to occasionally play [GNU Go](http://www.gnu.org/software/gnugo/) since switching to vim).
+    + `.emacs` - Minimal configurations for emacs (used only to occasionally play [GNU Go](http://www.gnu.org/software/gnugo/) since switching to vim).
 
 + [tmux](http://tmux.sourceforge.net/) (Terminal multiplexer, 1.8+):
     + `.tmux.conf` - Intuitive configurations, easy window/pane management, improved key bindings, and status bar customizations for tmux.
     + `tmux/` - Includes session profiles, status bar customization scripts, and OSX-specific configurations.
 
-+ [Vim](http://www.vim.org/) (Vi IMproved, text editor, 7+):
++ [Vim](http://www.vim.org/) (Vi IMproved, text editor, 7.4+):
     + `.vimrc` - Sensible configurations, key (re)mappings, and plugins for vim. Plugins are managed using [Vundle](http://github.com/gmarik/vundle).
     + `vim/colors` - Some colorschemes that I like.
 
