@@ -1,7 +1,6 @@
 # tmux session layout for python development.
 
 new -s pydev                # Create new session named 'pydev'
-new-window
 split-window -h -p 25       # Split pane 1 vertically by 25%
+split-window -v -p 30       # Split pane 2 horizontally by 30%
 select-pane -t 1
-select-window -t 1

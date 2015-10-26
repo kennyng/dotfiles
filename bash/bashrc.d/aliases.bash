@@ -7,7 +7,8 @@
 ####################################################################
 
 # Aliases for ls.
-alias ll='ls -alF'
+alias ll='ls -ahlF'
+alias lh='ls -hlF'
 alias la='ls -A'
 alias l='ls -CF'
 

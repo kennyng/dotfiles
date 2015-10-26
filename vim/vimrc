@@ -44,9 +44,14 @@ set complete-=i
 " Set default indent to width 4.
 set shiftwidth=4
 set tabstop=4
-" For html and javascript, set indent to width 2.
-autocmd FileType html setlocal shiftwidth=2 tabstop=2
+
+" Set html files to htmldjango.
+autocmd BufNewFile,BufRead *.html set filetype=htmldjango
+" For html, javascript, and text, set indent to width 2.
+autocmd FileType htmldjango setlocal shiftwidth=2 tabstop=2
+autocmd FileType css setlocal shiftwidth=2 tabstop=2
 autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
+autocmd FileType text setlocal shiftwidth=2 tabstop=2
 " Use spaces instead of tab.
 set expandtab
 
@@ -121,9 +126,7 @@ augroup vimrc
 augroup END
 set foldlevel=99
 
-" Toggle paste option and show visual feedback in status.
-nnoremap <F8> :set invpaste paste?<CR>
-set pastetoggle=<F8>
+" Show visual feedback in status.
 set showmode
 
 " Set to support 256 colorschemes.
@@ -154,6 +157,10 @@ com! Diffbuf call s:DiffWithSaved()
 " Remap <ESC> key.
 inoremap jk <esc>
 inoremap kj <esc>
+
+" Toggle paste mode.
+nnoremap <F8> :set invpaste paste?<CR>
+set pastetoggle=<F8>
 
 " Avoid accidental <C-U> (cannot undo delete)
 inoremap <C-U> <C-G>u<C-U>
