@@ -171,7 +171,7 @@ if maparg('<C-L>', 'n') ==# ''
 endif
 
 " Mappings for opening files in tabs.
-command -nargs=1 -complete=file_in_path TT tabfind <args>
+command -nargs=1 -complete=file TT tabfind <args>
 
 
 "------------------------------------------------------------------
