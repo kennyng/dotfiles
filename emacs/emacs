@@ -27,8 +27,8 @@
 (setq whitespace-style '(face empty tabs lines-tail trailing))
 (global-whitespace-mode t)
 
-;; Add package directory.
-(add-to-list 'load-path "~/.emacs.d/")
+;; Load packages.
+(load-file "~/.emacs.d/gnugo.el")
 
 ;; Enable auto-complete-mode.
 ;; Source: https://github.com/auto-complete/auto-complete
