@@ -1,0 +1,6 @@
+# tmux session layout for development.
+
+new-session              # Create new session.
+split-window -h -p 25    # Split pane 1 vertically by 25%
+split-window -v -p 30    # Split pane 2 horizontally by 30%
+select-pane -t 1         # Select first pane

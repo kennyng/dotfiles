@@ -20,3 +20,7 @@ alias rm='rm -i'
 # Use a unified format for diff(1) by default.
 alias diff='diff -u'
 
+# Source tmux development profile.
+if [ -f $HOME/.tmux/profiles/sh/tmux-dev.sh ]; then
+    alias tmux-dev='bash $HOME/.tmux/profiles/sh/tmux-dev.sh'
+fi
