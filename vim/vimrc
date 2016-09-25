@@ -1,70 +1,112 @@
+" vim: set foldmethod=marker foldlevel=0:
+" ============================================================================
+" Kenny Ng's .vimrc
+" ============================================================================
 set nocompatible
-filetype off
 
-" Set the runtime path to include Vundle and initiliaze.
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+" ============================================================================
+" INSTALLED PLUGINS {{{
+" ============================================================================
 
-"------------------------------------------------------------------
-" INSTALLED PLUGINS
-"------------------------------------------------------------------
-" vim plugin manager
-Plugin 'gmarik/Vundle.vim'
+" Automatically install vim-plug if missing.
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/plugged')
+
+" ----------------------------------------------------------------------------
+" STYLE & COLORS
+" ----------------------------------------------------------------------------
 " statusbar/tabline
-Plugin 'bling/vim-airline'
-" add-on to netrw browser
-Plugin 'tpope/vim-vinegar'
+Plug 'vim-airline/vim-airline'
+" vim-airline themes
+Plug 'vim-airline/vim-airline-themes'
+" base16 color themes
+Plug 'chriskempson/base16-vim'
+
+" ----------------------------------------------------------------------------
+" EDITING
+" ----------------------------------------------------------------------------
+" easily change, add, delete surroundings in pairs
+Plug 'tpope/vim-surround'
+" rename files from within vim
+Plug 'tpope/vim-eunuch'
+" split and join lines of code intelligently
+Plug 'AndrewRadev/splitjoin.vim'
+" undo history visualizer
+Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+
+" ----------------------------------------------------------------------------
+" SYNTAX & LANGUAGE
+" ----------------------------------------------------------------------------
 " general syntax checker
-Plugin 'scrooloose/syntastic'
-" insert mode tab completions
-Plugin 'ervandew/supertab'
-" python code completion
-Plugin 'davidhalter/jedi-vim'
-" git wrapper
-Plugin 'tpope/vim-fugitive'
-" support for editing R code
-Plugin 'vim-scripts/Vim-R-plugin'
-" pandoc integration
-Plugin 'vim-pandoc/vim-pandoc'
+Plug 'scrooloose/syntastic'
+" simple tab completion
+Plug 'ajh17/VimCompletesMe'
 " pandoc syntax module
-Plugin 'vim-pandoc/vim-pandoc-syntax'
-" Rmarkdown support
-Plugin 'vim-pandoc/vim-rmarkdown'
+Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': 'markdown.pandoc' }
 
-call vundle#end()
+" ----------------------------------------------------------------------------
+" MISCELLANEOUS
+" ----------------------------------------------------------------------------
+" add-on to netrw browser
+Plug 'tpope/vim-vinegar'
+" git wrapper
+Plug 'tpope/vim-fugitive'
+" support interactions between and REPL
+Plug 'jpalardy/vim-slime'
+" display indentation level
+Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesEnable' }
+" lookup documentation
+if has('mac')
+    Plug 'rizzatti/dash.vim',  { 'on': '<Plug>DashSearch' }
+endif
 
+
+call plug#end()
 
 " Enable filetype detection and loading plugin/indent files.
-filetype plugin indent on
+"filetype plugin indent on
 " Enable syntax highlighting.
-syntax enable
+"syntax on
 
-"------------------------------------------------------------------
-" VIM OPTION CONFIGURATIONS
-"------------------------------------------------------------------
+
+" }}}
+" ============================================================================
+" BASIC CONFIGURATIONS {{{
+" ============================================================================
+
+" Set colorscheme.
+if filereadable(expand("~/.vimrc_background"))
+    let base16colorspace=256
+    source ~/.vimrc_background
+endif
+set background=light
 
 " Copy indent from current line when starting new line.
 set autoindent
+
 " Enable backspace in insert-mode.
 set backspace=indent,eol,start
+
 " Remove i from vim search autocomplete.
 set complete-=i
-" Set default indent to width 4.
-set shiftwidth=4
-set tabstop=4
 
-" Set html files to htmldjango.
-autocmd BufNewFile,BufRead *.html set filetype=htmldjango
 " For html, javascript, and text, set indent to width 2.
-autocmd FileType htmldjango setlocal shiftwidth=2 tabstop=2
+autocmd FileType html setlocal shiftwidth=2 tabstop=2
 autocmd FileType css setlocal shiftwidth=2 tabstop=2
 autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
 autocmd FileType text setlocal shiftwidth=2 tabstop=2
-" Use spaces instead of tab.
+
+" Set default indent to width 4.
+set shiftwidth=4
+set tabstop=4" Use spaces instead of tab.
 set expandtab
 
-" Auto change working directory to inherit from current file.
-" set autochdir
+" Auto change working directory to inherit from current file (set autochdir).
 autocmd BufEnter * if expand("%:p:h") !~ '^/tmp' | silent! lcd %:p:h | endif
 
 " Enable unicode encoding.
@@ -78,7 +120,7 @@ set ttimeout
 set ttimeoutlen=100
 
 " Allow leaving/switching modified buffers.
-" set hidden
+set hidden
 
 " Start incremental searching before <enter>.
 set incsearch
@@ -87,8 +129,14 @@ set incsearch
 set laststatus=2
 " Show info about current cmd on status line.
 set showcmd
+" Show visual feedback in status.
+set showmode
+
 " Enable command line completion to expand to menu.
 set wildmenu
+" Ignore some file extensions with <TAB> completion.
+set wildignore=*.swp,*.bak,*.pyc,*.class
+
 " Add line numbers.
 set number
 " Set column highlight at 80 char.
@@ -114,8 +162,10 @@ set autoread
 " Support mac file formats.
 set fileformats+=mac
 
-" Store 1000 history entries.
+" Remember 1000 search history and command entries.
 set history=1000
+" Set larger (1000 levels) undo buffer.
+set undolevels=1000
 " Set max number of tabs.
 if &tabpagemax < 20
     set tabpagemax=20
@@ -134,18 +184,11 @@ augroup vimrc
 augroup END
 set foldlevel=99
 
-" Show visual feedback in status.
-set showmode
 
-" Set to support 256 colorschemes.
-set t_Co=256
-" Set colorscheme.
-colorscheme Tomorrow-Night-Eighties
-
-
-"------------------------------------------------------------------
-" VIM FUNCTIONS
-"------------------------------------------------------------------
+" }}}
+" ============================================================================
+" CUSTOM FUNCTIONS {{{
+" ============================================================================
 
 " diff current buffer with original/saved version.
 function! s:DiffWithSaved()
@@ -158,9 +201,13 @@ endfunction
 com! Diffbuf call s:DiffWithSaved()
 
 
-"------------------------------------------------------------------
-" KEY MAPPINGS
-"------------------------------------------------------------------
+" }}}
+" ============================================================================
+" KEY MAPPINGS {{{
+" ============================================================================
+
+" Remap <Leader> key from '\' to ','.
+let mapleader=','
 
 " Remap <ESC> key.
 inoremap jk <esc>
@@ -182,17 +229,20 @@ endif
 command -nargs=1 -complete=file TT tabfind <args>
 
 
-"------------------------------------------------------------------
+" }}}
+" ============================================================================
 " PLUGIN CONFIGURATIONS
-"------------------------------------------------------------------
+" ============================================================================
+" ----------------------------------------------------------------------------
+" Default {{{
+" ----------------------------------------------------------------------------
+" Enable extended '%' matching.
+runtime macros/matchit.vim
 
-" Load matchit.vim only if no newer version installed.
-if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
-    runtime! macros/matchit.vim
-endif
-
-" vim-airline configurations:
-"----------------------------------
+" }}}
+" ----------------------------------------------------------------------------
+" vim-airline {{{
+" ----------------------------------------------------------------------------
 " Use powerline patched fonts.
 let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
@@ -207,38 +257,123 @@ let g:airline#extensions#tabline#show_tab_type = 1
 let g:airline#extensions#tabline#show_buffers = 0
 let g:airline#extensions#tabline#close_symbol = ''
 " Change airline color theme.
-let g:airline_theme='sol'
+let g:airline_theme='base16'
 " Enable syntastic integration.
 let g:airline#extensions#syntastic#enabled = 1
 " Enable fugitive integration
 let g:airline#extensions#branch#enabled = 1
 
-" syntastic configurations:
-"----------------------------------
+" }}}
+" ----------------------------------------------------------------------------
+" syntastic {{{
+" ----------------------------------------------------------------------------
+" Use command :SyntasticCheck to explicitly invoke syntax check.
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+" Always stick any detected errors into error window (default: 0).
+"let g:syntastic_always_populate_loc_list = 1
+" Autmatically open and/or close error window (default: 2).
+"let g:syntastic_auto_loc_list = 1
+" Check for errors on file open (default: 1).
+"let g:syntastic_check_on_open = 1
+" Check for errors on file save and close (default: 1).
+"let g:syntastic_check_on_wq = 1
+" Set synastic symbols for marking syntax errors (default: 1).
+let g:syntastic_enable_signs = 1
+let g:syntastic_error_symbol = '❌'
+let g:syntastic_style_error_symbol = '⁉️'
+let g:syntastic_warning_symbol = '⚠️'
+let g:syntastic_style_warning_symbol = '💩'
+highlight link SyntasticErrorSign SignColumn
+highlight link SyntasticWarningSign SignColumn
+highlight link SyntasticStyleErrorSign SignColumn
+highlight link SyntasticStyleWarningSign SignColumn
+" Change highlight colors (SpellBad => Errors, SpellCap => Warnings).
+highlight SpellBad ctermfg=015 ctermbg=160 guifg=#ffffff guibg=#d70000
+highlight SpellCap ctermfg=015 ctermbg=184 guifg=#ffffff guibg=#dfdf00
 " Specify syntax checkers and ignore rules.
-let g:syntactic_python_checkers = ['flake8', 'python']
+let g:syntastic_python_checkers = ['flake8', 'python']
 let g:syntastic_python_flake8_args = '--ignore=E501'
-let g:syntastic_python_python_exec = 'python3'
-" Change highlight colors.
-highlight SpellBad ctermfg=015 ctermbg=203 guifg=#ffffff guibg=#ff5f87
-highlight SpellCap ctermfg=233 ctermbg=147 guifg=#2d2d2d guibg=#afafff
+let g:syntastic_c_checkers = ['make', 'gcc']
+let g:syntastic_javascript_checkers = ['standard']
 
-" supertab: specify completion type.
-let g:SuperTabDefaultCompletionType = "context"
+" }}}
+" ----------------------------------------------------------------------------
+" vim-pandoc-synax {{{
+" ----------------------------------------------------------------------------
+" Set pandoc filetype.
+augroup pandoc_syntax
+    au! BufNewFile,BufFilePRe,BufRead *.md set filetype=markdown.pandoc
+augroup END
 
-" jedi-vim configurations:
-"----------------------------------
-" Disable jedi auto-complete.
-let g:jedi#popup_on_dot = 0
-" Force Python version.
-let g:jedi#force_py_version = 3
-" let g:jedi#use_tabs_not_buffers = 0
-let g:jedi#use_splits_not_buffers = 'right'
+" Use |conceal| for pretty highlighting (default: 1).
+let g:pandoc#syntax#conceal#use = 0
+" Blacklist for |conceal| (default: []).
+"let g:pandoc#syntax#conceal#blacklist = ['atx', 'ellipses']
+" Specify languages and syntax files for highlighting code embeds.
+let g:pandoc#syntax#codeblocks#embdeds#langs = ['python', 'c', 'r', 'tex', 'javascript', 'json=javascript']
+" Use italics and strong in emphases (default: 1).
+let g:pandoc#syntax#style#emphases = 0
+" Enable underline, subscript, subscript, strikeout styles (default: 1).
+"let g:pandoc#syntax#style#underline_special = 0
 
-" Vim-R-plugin script settings
-"----------------------------------
-let maplocalleader = ","
-vmap <Space> <Plug>RDSendSelection
-nmap <Space> <Plug>RDSendLine
-let vimrplugin_applescript=0
-let vimrplugin_vsplit=1
+" }}}
+" ----------------------------------------------------------------------------
+" splitjoin {{{
+" ----------------------------------------------------------------------------
+let g:splitjoin_split_mapping = ''
+let g:splitjoin_join_mapping = ''
+nnoremap gss :SplitjoinSplit<cr>
+nnoremap gsj :SplitjoinJoin<cr>
+
+" }}}
+" ----------------------------------------------------------------------------
+" vim-slime {{{
+" ----------------------------------------------------------------------------
+" Set tmux as default session manager [Default: screen].
+let g:slime_target = 'tmux'
+" Set paste file for sending inputs [Default: $HOME/.slime_paste].
+let g:slime_paste_file = tempname()
+" Set default configuration options for prompt.
+let g:slime_default_config = {'socket_name': 'default', 'target_pane': ':0.2'}
+" Bypass prompt and use the specified default configuration options.
+let g:slime_dont_ask_default = 1
+" Use iPython's %cpaste function for error-free pasting.
+let g:slime_python_ipython = 1
+
+" }}}
+" ----------------------------------------------------------------------------
+" undotree {{{
+" ----------------------------------------------------------------------------
+let g:undotree_WindowLayout = 2
+nnoremap U :UndotreeToggle<CR>
+
+" }}}
+" ----------------------------------------------------------------------------
+" indentLine {{{
+" ----------------------------------------------------------------------------
+autocmd! User indentLine doautocmd indentLine Syntax
+" Specify whether to enable indentLine (default: 1).
+let g:indentLine_enabled = 0
+let g:indentLine_char = '│'
+" Specify max indent level to use.
+let g:indentLine_indentLevel = 5
+" Use colorscheme to highlight conceal (default: 1).
+"let g:indentLine_setColors = 0
+" Specify terminal vim indent line color.
+"let g:indentLine_color_term = 239
+
+" Toggle lines on and off with command :IndentLinesToggle.
+
+" }}}
+" ----------------------------------------------------------------------------
+" Dash {{{
+" ----------------------------------------------------------------------------
+" Remap :Dash to <Leader>d.
+nmap <silent> <Leader>d <Plug>DashSearch
+" Switch to Dash.app immediately upon search (default: 1).
+"let g:dash_activate = 0
+
+" }}}
+" ============================================================================
