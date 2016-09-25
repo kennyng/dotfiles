@@ -38,7 +38,7 @@ EOF)
 fi
 
 if [[ -n "$itunes_track" ]] || [[ -n "$itunes_artist" ]]; then
-    itunes="#[fg=colour31,bold] ♫ $itunes_artist - $itunes_track"
+    itunes="#[fg=colour238,bold] ♫ $itunes_artist - $itunes_track"
 fi
 
 # Resulting status-right format.
