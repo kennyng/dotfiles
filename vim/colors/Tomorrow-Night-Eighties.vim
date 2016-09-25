@@ -4,17 +4,21 @@
 " Hex colour conversion functions borrowed from the theme "Desert256""
 
 " Default GUI Colours
-let s:foreground = "cccccc"
-let s:background = "2d2d2d"
+"let s:foreground = "cccccc"
+let s:foreground = "f2f2f2"
+"let s:background = "2d2d2d"
+let s:background = "343434"
 let s:selection = "515151"
-let s:line = "393939"
-let s:comment = "999999"
+"let s:line = "393939"
+let s:line = "3f3f3f"
+"let s:comment = "999999"
+let s:comment = "b3b3b3"
 let s:red = "f2777a"
 let s:orange = "f99157"
 let s:yellow = "ffcc66"
 let s:green = "99cc99"
-let s:aqua = "009999"
-let s:blue = "99cccc"
+let s:aqua = "66cccc"
+let s:blue = "6699cc"
 let s:purple = "cc99cc"
 let s:window = "4d5057"
 
@@ -265,7 +269,7 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
 	" Standard Highlighting
 	call <SID>X("Comment", s:comment, "", "")
 	call <SID>X("Todo", s:comment, s:background, "")
-	call <SID>X("Title", s:comment, "", "")
+	call <SID>X("Title", s:purple, "", "")
 	call <SID>X("Identifier", s:red, "", "none")
 	call <SID>X("Statement", s:foreground, "", "")
 	call <SID>X("Conditional", s:foreground, "", "")
@@ -273,6 +277,7 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
 	call <SID>X("Structure", s:purple, "", "")
 	call <SID>X("Function", s:blue, "", "")
 	call <SID>X("Constant", s:orange, "", "")
+	call <SID>X("Keyword", s:orange, "", "")
 	call <SID>X("String", s:green, "", "")
 	call <SID>X("Special", s:foreground, "", "")
 	call <SID>X("PreProc", s:purple, "", "")
@@ -314,6 +319,21 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
 	call <SID>X("rubyControl", s:purple, "", "")
 	call <SID>X("rubyException", s:purple, "", "")
 
+	" Crystal Highlighting
+	call <SID>X("crystalSymbol", s:green, "", "")
+	call <SID>X("crystalConstant", s:yellow, "", "")
+	call <SID>X("crystalAccess", s:yellow, "", "")
+	call <SID>X("crystalAttribute", s:blue, "", "")
+	call <SID>X("crystalInclude", s:blue, "", "")
+	call <SID>X("crystalLocalVariableOrMethod", s:orange, "", "")
+	call <SID>X("crystalCurlyBlock", s:orange, "", "")
+	call <SID>X("crystalStringDelimiter", s:green, "", "")
+	call <SID>X("crystalInterpolationDelimiter", s:orange, "", "")
+	call <SID>X("crystalConditional", s:purple, "", "")
+	call <SID>X("crystalRepeat", s:purple, "", "")
+	call <SID>X("crystalControl", s:purple, "", "")
+	call <SID>X("crystalException", s:purple, "", "")
+
 	" Python Highlighting
 	call <SID>X("pythonInclude", s:purple, "", "")
 	call <SID>X("pythonStatement", s:purple, "", "")
@@ -336,11 +356,11 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
 	call <SID>X("javascriptGlobal", s:blue, "", "")
 	call <SID>X("javascriptStatement", s:red, "", "")
 
-        " CoffeeScript Highlighting
-        call <SID>X("coffeeRepeat", s:purple, "", "")
-        call <SID>X("coffeeConditional", s:purple, "", "")
-        call <SID>X("coffeeKeyword", s:purple, "", "")
-        call <SID>X("coffeeObject", s:yellow, "", "")
+	" CoffeeScript Highlighting
+	call <SID>X("coffeeRepeat", s:purple, "", "")
+	call <SID>X("coffeeConditional", s:purple, "", "")
+	call <SID>X("coffeeKeyword", s:purple, "", "")
+	call <SID>X("coffeeObject", s:yellow, "", "")
 
 	" HTML Highlighting
 	call <SID>X("htmlTag", s:red, "", "")
@@ -381,8 +401,10 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
 	call <SID>X("goTodo", s:yellow, "", "")
 	call <SID>X("goDeclType", s:blue, "", "")
 	call <SID>X("goBuiltins", s:purple, "", "")
+	call <SID>X("goRepeat", s:purple, "", "")
+	call <SID>X("goLabel", s:purple, "", "")
 
-	" Clojure "highlighting
+	" Clojure Highlighting
 	call <SID>X("clojureConstant", s:orange, "", "")
 	call <SID>X("clojureBoolean", s:orange, "", "")
 	call <SID>X("clojureCharacter", s:orange, "", "")
@@ -407,7 +429,7 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
 	call <SID>X("clojureRepeat", s:blue, "", "")
 	call <SID>X("clojureDispatch", s:blue, "", "")
 
-	" Scala "highlighting
+	" Scala Highlighting
 	call <SID>X("scalaKeyword", s:purple, "", "")
 	call <SID>X("scalaKeywordModifier", s:purple, "", "")
 	call <SID>X("scalaOperator", s:blue, "", "")
@@ -450,6 +472,11 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
 	call <SID>X("scalaXml", s:green, "", "")
 	call <SID>X("scalaConstructorSpecializer", s:yellow, "", "")
 	call <SID>X("scalaBackTick", s:blue, "", "")
+
+	" Git
+	call <SID>X("diffAdded", s:green, "", "")
+	call <SID>X("diffRemoved", s:red, "", "")
+	call <SID>X("gitcommitSummary", "", "", "bold")
 
 	" Delete Functions
 	delf <SID>X
