@@ -40,7 +40,8 @@ prompt() {
 
                 # Determine how many colors are supported.
                 if ((colors == 256)) ; then
-                    local green=$(tput setaf 47 2>/dev/null)
+                    # green default: 47
+                    local green=$(tput setaf 40 2>/dev/null)
                     local red=$(tput setaf 196 2>/dev/null)
                     local purple=$(tput setaf 141 2>/dev/null)
                     local blue=$(tput setaf 39 2>/dev/null)
