@@ -201,6 +201,12 @@ endfunction
 com! Diffbuf call s:DiffWithSaved()
 
 
+" Run unix commands without prompt popping up.
+command! -nargs=1 RunSilent
+    \ | execute ':silent !'.<q-args>
+    \ | execute ':redraw!'
+
+
 " }}}
 " ============================================================================
 " KEY MAPPINGS {{{
@@ -300,12 +306,16 @@ let g:syntastic_javascript_checkers = ['standard']
 
 " }}}
 " ----------------------------------------------------------------------------
-" vim-pandoc-synax {{{
+" vim-pandoc-syntax {{{
 " ----------------------------------------------------------------------------
 " Set pandoc filetype.
 augroup pandoc_syntax
     au! BufNewFile,BufFilePRe,BufRead *.md set filetype=markdown.pandoc
 augroup END
+
+" Map commands to compile pandoc markdown to html.
+nmap <Leader>pc :RunSilent pandoc -s --mathjax -c ~/Projects/_gists/github-pandoc.css -o /tmp/vim-pandoc-out.html %<CR>
+nmap <Leader>pp :RunSilent open -a /Applications/Google\ Chrome.app /tmp/vim-pandoc-out.html<CR>
 
 " Use |conceal| for pretty highlighting (default: 1).
 let g:pandoc#syntax#conceal#use = 0
@@ -317,6 +327,7 @@ let g:pandoc#syntax#codeblocks#embdeds#langs = ['python', 'c', 'r', 'tex', 'java
 let g:pandoc#syntax#style#emphases = 0
 " Enable underline, subscript, subscript, strikeout styles (default: 1).
 "let g:pandoc#syntax#style#underline_special = 0
+
 
 " }}}
 " ----------------------------------------------------------------------------
@@ -356,7 +367,7 @@ nnoremap U :UndotreeToggle<CR>
 autocmd! User indentLine doautocmd indentLine Syntax
 " Specify whether to enable indentLine (default: 1).
 let g:indentLine_enabled = 0
-let g:indentLine_char = '│'
+let g:indentLine_char = '┊'
 " Specify max indent level to use.
 let g:indentLine_indentLevel = 5
 " Use colorscheme to highlight conceal (default: 1).
