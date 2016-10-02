@@ -5,7 +5,15 @@
 # Create symbolic links to configuration files.
 # usage: ./config_setup [-Abetv] <absolute_path_to_repo>
 #
+# `config_setup` **options** (any combination of the following):
+#   `-b`    (Bash only)
+#   `-e`    (emacs only)
+#   `-t`    (tmux only)
+#   `-v`    (Vim only)
+#   `-A`    (all configurations; `./config_setup -A` equivalent to `./config_setup -betv`)
+#
 ###########################################################################
+
 
 # Check for Bash (>2.0).
 if [ ! "$BASH_VERSINFO" ] ; then
