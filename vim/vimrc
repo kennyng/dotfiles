@@ -36,6 +36,8 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-eunuch'
 " split and join lines of code intelligently
 Plug 'AndrewRadev/splitjoin.vim'
+" auto insert/delete brackets, parentheses, and quotes in pairs
+Plug 'jiangmiao/auto-pairs'
 " undo history visualizer
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 
@@ -95,16 +97,18 @@ set backspace=indent,eol,start
 " Remove i from vim search autocomplete.
 set complete-=i
 
-" For html, javascript, and text, set indent to width 2.
-autocmd FileType html setlocal shiftwidth=2 tabstop=2
-autocmd FileType css setlocal shiftwidth=2 tabstop=2
-autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
-autocmd FileType text setlocal shiftwidth=2 tabstop=2
-
-" Set default indent to width 4.
+" Set default indent width to 4 columns.
+set tabstop=4
+set softtabstop=4
 set shiftwidth=4
-set tabstop=4" Use spaces instead of tab.
+" Use spaces instead of tab.
 set expandtab
+
+" For specific file types: change indent width / spaces vs tab.
+autocmd FileType html setlocal tabstop=2 softtabstop=2 shiftwidth=2
+autocmd FileType htmldjango setlocal tabstop=2 softtabstop=2 shiftwidth=2
+autocmd FileType css setlocal tabstop=2 softtabstop=2 shiftwidth=2
+autocmd FileType text setlocal noexpandtab
 
 " Auto change working directory to inherit from current file (set autochdir).
 autocmd BufEnter * if expand("%:p:h") !~ '^/tmp' | silent! lcd %:p:h | endif
@@ -184,6 +188,9 @@ augroup vimrc
 augroup END
 set foldlevel=99
 
+" Enable spellcheck for markdown.
+autocmd BufRead, BufNewFile *.md setlocal spell
+
 
 " }}}
 " ============================================================================
@@ -220,8 +227,17 @@ inoremap jk <esc>
 inoremap kj <esc>
 
 " Toggle paste mode.
-nnoremap <F8> :set invpaste paste?<CR>
-set pastetoggle=<F8>
+nnoremap <F1> :set invpaste paste?<CR>
+set pastetoggle=<F1>
+
+" Show whitespace visual marking.
+nnoremap <F2> :<C-U>setlocal lcs=tab:>-,trail:-,eol:$ list! list?<CR>
+
+" Remove all trailing whitespace.
+nnoremap <F3> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
+
+" Convert spaces and tabs.
+nnoremap <F4> :%retab!<CR>
 
 " Avoid accidental <C-U> (cannot undo delete)
 inoremap <C-U> <C-G>u<C-U>
@@ -268,20 +284,23 @@ let g:airline_theme='base16'
 let g:airline#extensions#syntastic#enabled = 1
 " Enable fugitive integration
 let g:airline#extensions#branch#enabled = 1
+" Skip empty sections (remove red empty syntax error/warnings at the end).
+let g:airline_skip_empty_sections = 1
 
 " }}}
 " ----------------------------------------------------------------------------
 " syntastic {{{
 " ----------------------------------------------------------------------------
 " Use command :SyntasticCheck to explicitly invoke syntax check.
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+let g:syntastic_stl_format = '[%E{E:%e(#%fe)}%B{,}%W{W:%w(#%fw)}]'
 " Always stick any detected errors into error window (default: 0).
-"let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_always_populate_loc_list = 1
 " Autmatically open and/or close error window (default: 2).
-"let g:syntastic_auto_loc_list = 1
-" Check for errors on file open (default: 1).
+let g:syntastic_auto_loc_list = 1
+" Check for errors on file open (default: 0).
 "let g:syntastic_check_on_open = 1
 " Check for errors on file save and close (default: 1).
 "let g:syntastic_check_on_wq = 1
@@ -304,6 +323,7 @@ let g:syntastic_python_flake8_args = '--ignore=E501'
 let g:syntastic_c_checkers = ['make', 'gcc']
 let g:syntastic_javascript_checkers = ['standard']
 
+
 " }}}
 " ----------------------------------------------------------------------------
 " vim-pandoc-syntax {{{
@@ -314,8 +334,10 @@ augroup pandoc_syntax
 augroup END
 
 " Map commands to compile pandoc markdown to html.
-nmap <Leader>pc :RunSilent pandoc -s --mathjax -c ~/Projects/_gists/github-pandoc.css -o /tmp/vim-pandoc-out.html %<CR>
-nmap <Leader>pp :RunSilent open -a /Applications/Google\ Chrome.app /tmp/vim-pandoc-out.html<CR>
+nmap <Leader>pc :RunSilent pandoc -s --mathjax -c ~/Projects/_dev/gists/github-pandoc.css
+    \ -o /tmp/vim-pandoc-output.html %<CR>
+nmap <Leader>pp :RunSilent open -a /Applications/Google\ Chrome.app
+    \ /tmp/vim-pandoc-output.html<CR>
 
 " Use |conceal| for pretty highlighting (default: 1).
 let g:pandoc#syntax#conceal#use = 0
