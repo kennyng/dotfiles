@@ -3,14 +3,15 @@
 # config_setup
 # -------------
 # Create symbolic links to configuration files.
-# usage: ./config_setup [-Abetv] <absolute_path_to_repo>
+# usage: ./config_setup [-Abetvp] <absolute_path_to_repo>
 #
 # `config_setup` **options** (any combination of the following):
 #   `-b`    (Bash)
 #   `-e`    (emacs)
 #   `-t`    (tmux)
 #   `-v`    (Vim)
-#   `-A`    (all configurations; `./config_setup -A` or `./config_setup -betv`)
+#   '-p'    (Python)
+#   `-A`    (all configurations)
 #
 ###############################################################################
 
@@ -20,19 +21,21 @@ if [ ! "$BASH_VERSINFO" ] ; then
     return
 fi
 
-while getopts Abetv name
+while getopts Abetvp name
 do
     case $name in
         A)
             bash_opt=1;
             emacs_opt=1;
             tmux_opt=1;
-            vim_opt=1;;
+            vim_opt=1;
+            python_opt=1;;
         b)bash_opt=1;;
         e)emacs_opt=1;;
         t)tmux_opt=1;;
         v)vim_opt=1;;
-        *)echo "usage: ./config_setup [-Abetv]";;
+        p)python_opt=1;;
+        *)echo "usage: ./config_setup [-Abetvp]";;
     esac
 done
 
@@ -144,7 +147,24 @@ if [[ -n $vim_opt ]] ; then
     fi
 
     unset vim_dir vim_conf vim_colors
-    unset vim_conf_symlink cim_colors_symlinks vim_opt
+    unset vim_conf_symlink vim_colors_symlinks vim_opt
+fi
+
+if [[ -n $python_opt ]] ; then
+    echo "Configuring Python..."
+    python_dir=${config_repo_path%%/}/python
+    python_conf=${python_dir%%/}/pythonrc
+    python_conf_symlink=$HOME/.pythonrc
+    
+    if [[ -f $python_conf_symlink ]] ; then
+        echo "ERROR: '$python_conf_symlink' already exists."
+    else
+        ln -s "$python_conf" "$python_conf_symlink"
+        echo "> created symbolic link: $python_conf_symlink"
+        echo "Add the following to ~/.profile: export PYTHONSTARTUP=\$HOME/.pythonrc"
+    fi
+
+    unset python_dir python_conf python_conf_symlink python_opt
 fi
 
 unset config_repo_path
