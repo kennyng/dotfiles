@@ -59,10 +59,10 @@ prompt() {
                         tput setaf 4 || tput bold || tput md
                     } 2>/dev/null)
                 fi
-                # Lowercase names. 
+                # Lowercase names.
                 # local username=$(whoami | tr '[:upper:]' '[:lower:]')
-                local username=$(whoami)
-                local format='[\['"$green"'\]'"$username"'@\h\['"$reset"'\]:\['"$blue"'\]\w\['$reset'\]]'
+                # local username=$(whoami)
+                local format='[\['"$green"'\]\u@\h\['"$reset"'\]:\['"$blue"'\]\w\['$reset'\]]'
 
                 PS1="$format"'\['"$purple"'\]$(prompt git)\['"$reset"'\]\['"$red"'\]$(prompt job)\['"$reset"'\]\n\$ '
             else

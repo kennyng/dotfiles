@@ -1,17 +1,15 @@
 #!/bin/bash
 ###############################################################################
-# config_setup
-# -------------
+# setup-configuration.sh
+# -----------------------
 # Create symbolic links to configuration files.
-# usage: ./config_setup [-Abetvp] <absolute_path_to_repo>
+# usage: ./setup-configuration [-Abtv] <absolute_path_to_repo>
 #
-# `config_setup` **options** (any combination of the following):
+# `steup-configuration` **options** (any combination of the following):
+#   `-A`    (all configurations)
 #   `-b`    (Bash)
-#   `-e`    (emacs)
 #   `-t`    (tmux)
 #   `-v`    (Vim)
-#   '-p'    (Python)
-#   `-A`    (all configurations)
 #
 ###############################################################################
 
@@ -26,16 +24,12 @@ do
     case $name in
         A)
             bash_opt=1;
-            emacs_opt=1;
             tmux_opt=1;
-            vim_opt=1;
-            python_opt=1;;
+            vim_opt=1;;
         b)bash_opt=1;;
-        e)emacs_opt=1;;
         t)tmux_opt=1;;
         v)vim_opt=1;;
-        p)python_opt=1;;
-        *)echo "usage: ./config_setup [-Abetvp]";;
+        *)echo "usage: ./setup-configuration [-Abtv]";;
     esac
 done
 
@@ -57,26 +51,26 @@ if [[ -n $bash_opt ]] ; then
         echo "ERROR: '$profile_symlink' already exists."
     else
         ln -s "$bash_profile" "$profile_symlink"
-        echo "> created symbolic link: $profile_symlink"
+        echo "> Created symbolic link: $profile_symlink"
     fi
-    
+
     if [[ -f $bashrc_symlink ]] ; then
         echo "ERROR: '$bashrc_symlink' already exists."
     else
         ln -s "$bashrc" "$bashrc_symlink"
-        echo "> created symbolic link: $bashrc_symlink"
+        echo "> Created symbolic link: $bashrc_symlink"
     fi
     if [[ -f $bashrc_dir_symlink ]] ; then
         echo "ERROR: '$bashrc_dir_symlink' already exists."
     else
         ln -s "$bashrc_dir" "$bashrc_dir_symlink"
-        echo "> created symbolic link: $bashrc_dir_symlink"
+        echo "> Created symbolic link: $bashrc_dir_symlink"
     fi
     if [[ -f $logout_symlink ]] ; then
         echo "ERROR: '$logout_symlink' already exists."
     else
         ln -s "$bash_logout" "$logout_symlink"
-        echo "> created symbolic link: $logout_symlink"
+        echo "> Created symbolic link: $logout_symlink"
     fi
 
     unset bash_dir bash_profile bashrc bashrc_dir logout
@@ -84,21 +78,6 @@ if [[ -n $bash_opt ]] ; then
     unset bash_opt
 fi
 
-if [[ -n $emacs_opt ]] ; then
-    echo "Configuring emacs..."
-    emacs_dir=${config_repo_path%%/}/emacs
-    emacs_conf=${emacs_dir%%/}/emacs
-    emacs_conf_symlink=$HOME/.emacs
-
-    if [[ -f $emacs_conf_symlink ]]; then
-        echo "ERROR: '$emacs_conf_symlink' already exists."
-    else
-        ln -s "$emacs_conf" "$emacs_conf_symlink"
-        echo "> created symbolic link: $emacs_conf_symlink"
-    fi
-    
-    unset emacs_dir emacs_conf emacs_conf_symlink emacs_opt
-fi
 
 if [[ -n $tmux_opt ]] ; then
     echo "Configuring tmux..."
@@ -111,18 +90,19 @@ if [[ -n $tmux_opt ]] ; then
         echo "ERROR: '$tmux_dir_symlink' already exists."
     else
         ln -s "$tmux_dir" "$tmux_dir_symlink"
-        echo "> created symbolic link: $tmux_dir_symlink"
+        echo "> Created symbolic link: $tmux_dir_symlink"
     fi
 
     if [[ -f $tmux_conf_symlink ]] ; then
         echo "ERROR: '$tmux_conf_symlink' already exists."
     else
         ln -s "$tmux_conf" "$tmux_conf_symlink"
-        echo "> created symbolic link: $tmux_conf_symlink"
+        echo "> Created symbolic link: $tmux_conf_symlink"
     fi
 
     unset tmux_dir tmux_conf tmux_dir_symlink tmux_conf_symlink tmux_opt
 fi
+
 
 if [[ -n $vim_opt ]] ; then
     echo "Configuring Vim..."
@@ -136,35 +116,18 @@ if [[ -n $vim_opt ]] ; then
         echo "ERROR: '$vim_conf_symlink' already exists."
     else
         ln -s "$vim_conf" "$vim_conf_symlink"
-        echo "> created symbolic link: $vim_conf_symlink"
+        echo "> Created symbolic link: $vim_conf_symlink"
     fi
 
     if [[ -d $vim_colors_symlink ]] ; then
         echo "ERROR: '$vim_colors_symlink' already exists."
     else
         ln -s "$vim_colors" "$vim_colors_symlink"
-        echo "> created symbolic link: $vim_colors_symlink"
+        echo "> Created symbolic link: $vim_colors_symlink"
     fi
 
     unset vim_dir vim_conf vim_colors
     unset vim_conf_symlink vim_colors_symlinks vim_opt
-fi
-
-if [[ -n $python_opt ]] ; then
-    echo "Configuring Python..."
-    python_dir=${config_repo_path%%/}/python
-    python_conf=${python_dir%%/}/pythonrc
-    python_conf_symlink=$HOME/.pythonrc
-    
-    if [[ -f $python_conf_symlink ]] ; then
-        echo "ERROR: '$python_conf_symlink' already exists."
-    else
-        ln -s "$python_conf" "$python_conf_symlink"
-        echo "> created symbolic link: $python_conf_symlink"
-        echo "Add the following to ~/.profile: export PYTHONSTARTUP=\$HOME/.pythonrc"
-    fi
-
-    unset python_dir python_conf python_conf_symlink python_opt
 fi
 
 unset config_repo_path
