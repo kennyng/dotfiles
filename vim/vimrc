@@ -108,6 +108,7 @@ set expandtab
 autocmd FileType html setlocal tabstop=2 softtabstop=2 shiftwidth=2
 autocmd FileType htmldjango setlocal tabstop=2 softtabstop=2 shiftwidth=2
 autocmd FileType css setlocal tabstop=2 softtabstop=2 shiftwidth=2
+autocmd FileType tex setlocal tabstop=2 softtabstop=2 shiftwidth=2
 autocmd FileType text setlocal noexpandtab
 
 " Auto change working directory to inherit from current file (set autochdir).
@@ -197,6 +198,19 @@ autocmd BufRead, BufNewFile *.md setlocal spell
 " CUSTOM FUNCTIONS {{{
 " ============================================================================
 
+" Markdown syntax folding.
+function! MarkdownLevel()
+    let h = matchstr(getline(v:lnum), '^#\+')
+    if empty(h)
+        return "="
+    else
+        return ">" . len(h)
+    endif
+endfunction
+au BufEnter *.md setlocal foldexpr=MarkdownLevel()
+au BufEnter *.md setlocal foldmethod=expr
+
+
 " diff current buffer with original/saved version.
 function! s:DiffWithSaved()
     let filetype=&ft
@@ -222,9 +236,11 @@ command! -nargs=1 RunSilent
 " Remap <Leader> key from '\' to ','.
 let mapleader=','
 
-" Remap <ESC> key.
-inoremap jk <esc>
-inoremap kj <esc>
+" Remap <ESC> key to exit from insert mode.
+inoremap jk <ESC>
+
+" Copy visual selection to clipboard.
+vnoremap ]] "*y
 
 " Toggle paste mode.
 nnoremap <F1> :set invpaste paste?<CR>
@@ -306,10 +322,10 @@ let g:syntastic_auto_loc_list = 1
 "let g:syntastic_check_on_wq = 1
 " Set synastic symbols for marking syntax errors (default: 1).
 let g:syntastic_enable_signs = 1
-let g:syntastic_error_symbol = '❌'
-let g:syntastic_style_error_symbol = '⁉️'
-let g:syntastic_warning_symbol = '⚠️'
-let g:syntastic_style_warning_symbol = '💩'
+let g:syntastic_error_symbol = 'E!'
+let g:syntastic_style_error_symbol = 'S!'
+let g:syntastic_warning_symbol = 'E?'
+let g:syntastic_style_warning_symbol = 'S?'
 highlight link SyntasticErrorSign SignColumn
 highlight link SyntasticWarningSign SignColumn
 highlight link SyntasticStyleErrorSign SignColumn
@@ -322,7 +338,7 @@ let g:syntastic_python_checkers = ['flake8', 'python']
 let g:syntastic_python_flake8_args = '--ignore=E501'
 let g:syntastic_c_checkers = ['make', 'gcc']
 let g:syntastic_javascript_checkers = ['standard']
-
+let syntastic_mode_map = { 'passive_filetypes': ['html'] }
 
 " }}}
 " ----------------------------------------------------------------------------
@@ -336,7 +352,7 @@ augroup END
 " Map commands to compile pandoc markdown to html.
 nmap <Leader>pc :RunSilent pandoc -s --mathjax -c ~/Projects/_dev/gists/github-pandoc.css
     \ -o /tmp/vim-pandoc-output.html %<CR>
-nmap <Leader>pp :RunSilent open -a /Applications/Google\ Chrome.app
+nmap <Leader>pp :RunSilent open -a /Applications/Safari.app
     \ /tmp/vim-pandoc-output.html<CR>
 
 " Use |conceal| for pretty highlighting (default: 1).
