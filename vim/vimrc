@@ -37,7 +37,7 @@ Plug 'tpope/vim-eunuch'
 " split and join lines of code intelligently
 Plug 'AndrewRadev/splitjoin.vim'
 " auto insert/delete brackets, parentheses, and quotes in pairs
-Plug 'jiangmiao/auto-pairs'
+"Plug 'jiangmiao/auto-pairs'
 " undo history visualizer
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 
@@ -45,11 +45,19 @@ Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 " SYNTAX & LANGUAGE
 " ----------------------------------------------------------------------------
 " general syntax checker
-Plug 'scrooloose/syntastic'
+"Plug 'scrooloose/syntastic'
+" (better) asynchronous general syntax checker
+Plug 'w0rp/ale'
 " simple tab completion
 Plug 'ajh17/VimCompletesMe'
 " pandoc syntax module
 Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': 'markdown.pandoc' }
+" JavaScript syntax highlighting
+Plug 'pangloss/vim-javascript'
+" JSX syntax highlighting
+Plug 'mxw/vim-jsx'
+" Autocomplete CSS to HTML / JSX
+Plug 'mattn/emmet-vim'
 
 " ----------------------------------------------------------------------------
 " MISCELLANEOUS
@@ -77,6 +85,7 @@ call plug#end()
 
 
 " }}}
+
 " ============================================================================
 " BASIC CONFIGURATIONS {{{
 " ============================================================================
@@ -108,6 +117,9 @@ set expandtab
 autocmd FileType html setlocal tabstop=2 softtabstop=2 shiftwidth=2
 autocmd FileType htmldjango setlocal tabstop=2 softtabstop=2 shiftwidth=2
 autocmd FileType css setlocal tabstop=2 softtabstop=2 shiftwidth=2
+autocmd FileType js setlocal tabstop=2 softtabstop=2 shiftwidth=2
+autocmd FileType jsx setlocal tabstop=2 softtabstop=2 shiftwidth=2
+autocmd FileType javascript.jsx setlocal tabstop=2 softtabstop=2 shiftwidth=2
 autocmd FileType tex setlocal tabstop=2 softtabstop=2 shiftwidth=2
 autocmd FileType text setlocal noexpandtab
 
@@ -194,9 +206,27 @@ autocmd BufRead, BufNewFile *.md setlocal spell
 
 
 " }}}
+
 " ============================================================================
 " CUSTOM FUNCTIONS {{{
 " ============================================================================
+
+" diff current buffer with original/saved version.
+function! s:DiffWithSaved()
+    let filetype=&ft
+    diffthis
+    vnew | r # | normal! 1Gdd
+    diffthis
+    exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
+endfunction
+command! Diffbuf call s:DiffWithSaved()
+
+
+" Run unix commands without prompt popping up.
+command! -nargs=1 RunSilent
+    \ | execute ':silent !'.<q-args>
+    \ | execute ':redraw!'
+
 
 " Markdown syntax folding.
 function! MarkdownLevel()
@@ -211,24 +241,8 @@ au BufEnter *.md setlocal foldexpr=MarkdownLevel()
 au BufEnter *.md setlocal foldmethod=expr
 
 
-" diff current buffer with original/saved version.
-function! s:DiffWithSaved()
-    let filetype=&ft
-    diffthis
-    vnew | r # | normal! 1Gdd
-    diffthis
-    exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
-endfunction
-com! Diffbuf call s:DiffWithSaved()
-
-
-" Run unix commands without prompt popping up.
-command! -nargs=1 RunSilent
-    \ | execute ':silent !'.<q-args>
-    \ | execute ':redraw!'
-
-
 " }}}
+
 " ============================================================================
 " KEY MAPPINGS {{{
 " ============================================================================
@@ -268,8 +282,9 @@ command -nargs=1 -complete=file TT tabfind <args>
 
 
 " }}}
+
 " ============================================================================
-" PLUGIN CONFIGURATIONS
+" PLUGIN CONFIGURATIONS {{{
 " ============================================================================
 " ----------------------------------------------------------------------------
 " Default {{{
@@ -278,6 +293,7 @@ command -nargs=1 -complete=file TT tabfind <args>
 runtime macros/matchit.vim
 
 " }}}
+
 " ----------------------------------------------------------------------------
 " vim-airline {{{
 " ----------------------------------------------------------------------------
@@ -294,6 +310,9 @@ let g:airline#extensions#tabline#show_tab_type = 1
 " Disable buffers for single tab on tabline.
 let g:airline#extensions#tabline#show_buffers = 0
 let g:airline#extensions#tabline#close_symbol = ''
+" Remove tab/buffer labels.
+let g:airline#extensions#tabline#tabs_label = ''
+let g:airline#extensions#tabline#show_splits = 0
 " Change airline color theme.
 let g:airline_theme='base16'
 " Enable syntastic integration.
@@ -304,43 +323,93 @@ let g:airline#extensions#branch#enabled = 1
 let g:airline_skip_empty_sections = 1
 
 " }}}
+
 " ----------------------------------------------------------------------------
-" syntastic {{{
+" (DEPRECATED) syntastic {{{
 " ----------------------------------------------------------------------------
 " Use command :SyntasticCheck to explicitly invoke syntax check.
 "set statusline+=%#warningmsg#
 "set statusline+=%{SyntasticStatuslineFlag()}
 "set statusline+=%*
-let g:syntastic_stl_format = '[%E{E:%e(#%fe)}%B{,}%W{W:%w(#%fw)}]'
+"let g:syntastic_stl_format = '[%E{E:%e(#%fe)}%B{,}%W{W:%w(#%fw)}]'
 " Always stick any detected errors into error window (default: 0).
-let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_always_populate_loc_list = 1
 " Autmatically open and/or close error window (default: 2).
-let g:syntastic_auto_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
 " Check for errors on file open (default: 0).
 "let g:syntastic_check_on_open = 1
 " Check for errors on file save and close (default: 1).
 "let g:syntastic_check_on_wq = 1
 " Set synastic symbols for marking syntax errors (default: 1).
-let g:syntastic_enable_signs = 1
-let g:syntastic_error_symbol = 'E!'
-let g:syntastic_style_error_symbol = 'S!'
-let g:syntastic_warning_symbol = 'E?'
-let g:syntastic_style_warning_symbol = 'S?'
-highlight link SyntasticErrorSign SignColumn
-highlight link SyntasticWarningSign SignColumn
-highlight link SyntasticStyleErrorSign SignColumn
-highlight link SyntasticStyleWarningSign SignColumn
+"let g:syntastic_enable_signs = 1
+"let g:syntastic_error_symbol = 'E!'
+"let g:syntastic_style_error_symbol = 'S!'
+"let g:syntastic_warning_symbol = 'E?'
+"let g:syntastic_style_warning_symbol = 'S?'
+"highlight link SyntasticErrorSign SignColumn
+"highlight link SyntasticWarningSign SignColumn
+"highlight link SyntasticStyleErrorSign SignColumn
+"highlight link SyntasticStyleWarningSign SignColumn
 " Change highlight colors (SpellBad => Errors, SpellCap => Warnings).
-highlight SpellBad ctermfg=015 ctermbg=160 guifg=#ffffff guibg=#d70000
-highlight SpellCap ctermfg=015 ctermbg=184 guifg=#ffffff guibg=#dfdf00
+"highlight SpellBad ctermfg=015 ctermbg=160 guifg=#ffffff guibg=#d70000
+"highlight SpellCap ctermfg=015 ctermbg=184 guifg=#ffffff guibg=#dfdf00
 " Specify syntax checkers and ignore rules.
-let g:syntastic_python_checkers = ['flake8', 'python']
-let g:syntastic_python_flake8_args = '--ignore=E501'
-let g:syntastic_c_checkers = ['make', 'gcc']
-let g:syntastic_javascript_checkers = ['standard']
-let syntastic_mode_map = { 'passive_filetypes': ['html'] }
+"let g:syntastic_python_checkers = ['flake8', 'python']
+"let g:syntastic_python_flake8_args = '--ignore=E501'
+"let g:syntastic_c_checkers = ['make', 'gcc']
+"let g:syntastic_javascript_checkers = ['standard']
+"let syntastic_mode_map = { 'passive_filetypes': ['html'] }
 
 " }}}
+
+" ----------------------------------------------------------------------------
+" ale {{{
+" ----------------------------------------------------------------------------
+" Change default signs and highlight colors
+"let g:ale_sign_error = '✘'
+let g:ale_sign_error = '●'
+let g:ale_sign_warning = '●'
+highlight ALEErrorSign ctermfg=160 guifg=#d70000
+highlight ALEWarningSign ctermfg=184 guifg=#dfdf00
+highlight clear SignColumn
+" Keep sign gutter always open
+"let g:ale_sign_column_always = 1
+" Do not run linter when opening a file
+let g:ale_lint_on_enter = 0
+" Disable highlighting
+let g:ale_set_highlights = 0
+" Show errors / warnings in statusline
+let g:airline#extensions#ale#enabled = 1
+" Run linter only when files are saved
+let g:ale_lint_on_text_changed = 'never'
+" Fix files automatically on save (on by default)
+let g:ale_fix_on_save = 1
+
+" Set linters to use (language-specific)
+let g:ale_fixers = {'javascript': ['eslint'], 'python': ['black', 'isort']}
+
+" Keymappings
+nmap <Leader>l <Plug>(ale_fix)
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+" }}}
+
+" ----------------------------------------------------------------------------
+" vim-jsx {{{
+" ----------------------------------------------------------------------------
+let g:jsx_ext_required = 0
+
+" }}}
+
+" ----------------------------------------------------------------------------
+" emmet-vim {{{
+" ----------------------------------------------------------------------------
+let g:user_emmet_leader_key='<Tab>'
+let g:user_emmet_settings = {'javascript.jsx': {'extends' : 'jsx',},}
+
+" }}}
+
 " ----------------------------------------------------------------------------
 " vim-pandoc-syntax {{{
 " ----------------------------------------------------------------------------
@@ -368,6 +437,7 @@ let g:pandoc#syntax#style#emphases = 0
 
 
 " }}}
+
 " ----------------------------------------------------------------------------
 " splitjoin {{{
 " ----------------------------------------------------------------------------
@@ -377,6 +447,7 @@ nnoremap gss :SplitjoinSplit<cr>
 nnoremap gsj :SplitjoinJoin<cr>
 
 " }}}
+
 " ----------------------------------------------------------------------------
 " vim-slime {{{
 " ----------------------------------------------------------------------------
@@ -392,6 +463,7 @@ let g:slime_dont_ask_default = 1
 let g:slime_python_ipython = 1
 
 " }}}
+
 " ----------------------------------------------------------------------------
 " undotree {{{
 " ----------------------------------------------------------------------------
@@ -399,6 +471,7 @@ let g:undotree_WindowLayout = 2
 nnoremap U :UndotreeToggle<CR>
 
 " }}}
+
 " ----------------------------------------------------------------------------
 " indentLine {{{
 " ----------------------------------------------------------------------------
@@ -416,6 +489,7 @@ let g:indentLine_indentLevel = 5
 " Toggle lines on and off with command :IndentLinesToggle.
 
 " }}}
+
 " ----------------------------------------------------------------------------
 " Dash {{{
 " ----------------------------------------------------------------------------
@@ -423,6 +497,8 @@ let g:indentLine_indentLevel = 5
 nmap <silent> <Leader>d <Plug>DashSearch
 " Switch to Dash.app immediately upon search (default: 1).
 "let g:dash_activate = 0
+
+" }}}
 
 " }}}
 " ============================================================================

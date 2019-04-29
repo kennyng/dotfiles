@@ -3,23 +3,22 @@
 # ~/.bash_profile
 # ----------------
 # Sources:
-#   ~/.profile - contains PATH and other environment variables.
-#   ~/.bashrc - contains bash shell configurations.
+#   ~/.profile - contains PATH and other environment variables
+#   ~/.bashrc - contains bash shell configurations
 #
-# echo "Loading '${HOME}/.bash_profile'..."
 ####################################################################
 
-# Check for Bash (<2.0).
+# Check for Bash
 if [ ! "$BASH_VERSINFO" ] ; then
     return
 fi
 
-# Source Bourne shell profile.
+# Source Bourne shell profile
 if [[ -r $HOME/.profile ]] ; then
     source "$HOME"/.profile
 fi
 
-# Source interactive Bash config.
+# Source interactive Bash config
 if [[ -r $HOME/.bashrc ]] ; then
     source "$HOME"/.bashrc
 fi

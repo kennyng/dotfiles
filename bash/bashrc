@@ -2,12 +2,12 @@
 ###########################################################################
 # ~/.bashrc
 # ----------
-# Executed by bash(1) for non-login shells.
-# Configurations for bash shell.
+# Bash configurations
+# Executed by bash(1) for non-login shells
 #
 ###########################################################################
 
-# Check for Bash (>2.0).
+# Check for Bash
 if [ ! "$BASH_VERSINFO" ] ; then
     return
 fi
@@ -18,54 +18,54 @@ case $- in
       *) return;;
 esac
 
-# Set history in file length.
+# Set history in file length
 HISTFILESIZE=10000
-# Set history in memory length.
+# Set history in memory length
 HISTSIZE=1000
-# Ignore duplicate commands and whitespaces in history.
+# Ignore duplicate commands and whitespaces in history
 HISTCONTROL=ignoreboth
-# Ignore certain commands in history.
+# Ignore certain commands in history
 HISTIGNORE='ls:bg:fg:history'
-# Record timestamp of each command in history.
+# Record timestamp of each command in history
 HISTTIMEFORMAT='%F %T '
 
-# Append to history; do not overwrite it.
+# Append to history; do not overwrite it
 shopt -s histappend
-# Put multi-line commands onto one line of history.
+# Put multi-line commands onto one line of history
 shopt -s cmdhist
-# Autocorrect typos in path names when using `cd`.
+# Autocorrect typos in path names when using `cd`
 shopt -s cdspell
-# Update columns and rows if window size changes.
+# Update columns and rows if window size changes
 shopt -s checkwinsize
-# Include dotfiles in pattern matching.
+# Include dotfiles in pattern matching
 shopt -s dotglob
-# Include advanced pattern matching (regular expressions).
+# Include advanced pattern matching (regular expressions)
 shopt -s extglob
-# Enable case-insensitive pattern matching.
+# Enable case-insensitive pattern matching
 shopt -s nocaseglob
-# Ignore attempts to complete an empty line.
+# Ignore attempts to complete an empty line
 shopt -s no_empty_cmd_completion
 # Use programmable completion, if available
 shopt -s progcomp
-# Provide warning for overshifting.
+# Provide warning for overshifting
 shopt -s shift_verbose
 
-# Do not use Bash's builtin host completion.
+# Do not use Bash's builtin host completion
 shopt -u hostcomplete
-# Do not use PATH to find files to source.
+# Do not use PATH to find files to source
 shopt -u sourcepath
 
-# Options for Bash 4.0+.
+# Options for Bash 4.0+
 if [[ $BASH_VERSINFO -ge '4' ]] ; then
-    # Provide warning about stopped jobs when exiting.
+    # Provide warning about stopped jobs when exiting
     shopt -s checkjobs
-    # Autocorrect paths during completion.
+    # Autocorrect paths during completion
     shopt -s dirspell
-    # Enable "**" pattern in pathname expansion.
+    # Enable "**" pattern in pathname expansion
     shopt -s globstar
 fi
 
-# Load supplementary scripts.
+# Load supplementary scripts
 if [[ -d $HOME/.bashrc.d ]] ; then
     for config in "$HOME"/.bashrc.d/*.bash ; do
         if [[ -r $config ]] ; then
@@ -74,4 +74,3 @@ if [[ -d $HOME/.bashrc.d ]] ; then
     done
 fi
 unset -v config
-
