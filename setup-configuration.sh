@@ -108,9 +108,7 @@ if [[ -n $vim_opt ]] ; then
     echo "Configuring Vim..."
     vim_dir=${config_repo_path%%/}/vim
     vim_conf=${vim_dir%%/}/vimrc
-    vim_colors=${vim_dir%%/}/colors
     vim_conf_symlink=$HOME/.vimrc
-    vim_colors_symlink=$HOME/.vim/colors
 
     if [[ -f $vim_conf_symlink ]] ; then
         echo "ERROR: '$vim_conf_symlink' already exists."
@@ -119,15 +117,8 @@ if [[ -n $vim_opt ]] ; then
         echo "> Created symbolic link: $vim_conf_symlink"
     fi
 
-    if [[ -d $vim_colors_symlink ]] ; then
-        echo "ERROR: '$vim_colors_symlink' already exists."
-    else
-        ln -s "$vim_colors" "$vim_colors_symlink"
-        echo "> Created symbolic link: $vim_colors_symlink"
-    fi
-
-    unset vim_dir vim_conf vim_colors
-    unset vim_conf_symlink vim_colors_symlinks vim_opt
+    unset vim_dir vim_conf
+    unset vim_conf_symlink vim_opt
 fi
 
 unset config_repo_path

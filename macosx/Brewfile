@@ -24,15 +24,13 @@ brew "vim"
 brew "watch"
 brew "wget"
 
-# APPLICATIONS
+# MAC APPLICATIONS
 cask "calibre"
 cask "carbon-copy-cloner"
 cask "dash"
 cask "dropbox"
 cask "google-chrome"
 cask "iterm2"
-cask "kindlegen"
-cask "music-manager"
 cask "slack"
 cask "sublime-text"
 cask "tunnelblick"

@@ -1,0 +1,42 @@
+######################################################################
+# bash/profile-macosx
+# -------------------
+# ~/.profile: executed by command interpreter for login shells
+# Exports PATH and other environment variables on macOS.
+#
+######################################################################
+
+echo "[ $(date +'%A | %Y-%m-%d | %r') ] ~ Welcome, Kenny! ヾ(＾-＾)ノ"
+
+# Enable color support for ls and grep
+# Order: directory, symlink, socket, pipe, executable,
+#        block special, character special, executable setuid,
+#        executable setgid, directory writable sticky, directory writable
+export CLICOLOR=1
+export LSCOLORS=ExFxBxDxCxegedabagacad
+# Solarized dircolors:
+#export LSCOLORS=gxfxbEaEBxxEhEhBaDaCaD
+export GREP_OPTIONS='--color=auto'
+
+# Set vim as default editor
+export GIT_EDITOR=vim
+export VISUAL=vim
+export EDITOR=vim
+
+# Set color scheme according to time of day
+#H=$(date +%H)
+#if (( 6 <= 10#$H && 10#$H < 18 )); then
+#     # Use light theme between 6AM and 6PM.
+#    base16_solarized-light
+#    base16_tomorrow
+#    base16_google-light
+#    base16_default-light
+#    base16_shapeshifter
+#    base16_harmonic16-light
+#else
+#    base16_solarized-dark
+#    base16_eighties
+#    base16_railscasts
+#    base16_ocean
+#    base16_oceanicnext
+#fi

@@ -74,3 +74,21 @@ if [[ -d $HOME/.bashrc.d ]] ; then
     done
 fi
 unset -v config
+
+# Initialize color schemes for shell
+BASE16_SHELL=$HOME/.config/base16-shell/
+[ -n "$PS1" ] && \
+    [ -s $BASE16_SHELL/profile_helper.sh ] && \
+        eval "$($BASE16_SHELL/profile_helper.sh)"
+
+# Enable programmable completion for Bash
+[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && \
+    . "/usr/local/etc/profile.d/bash_completion.sh"
+
+# Setup pyenv and pyenv-virtualenv
+if command -v pyenv 1>/dev/null 2>&1; then
+    eval "$(pyenv init -)"
+fi
+if command -v pyenv-virtualenv 1>/dev/null 2>&1; then
+    eval "$(pyenv virtualenv-init -)"
+fi

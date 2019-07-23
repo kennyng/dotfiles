@@ -1,0 +1,9 @@
+######################################################################
+# bash/profile-linux
+# -------------------
+# ~/.profile: executed by command interpreter for login shells
+# Exports PATH and other environment variables on Linux.
+#
+######################################################################
+
+
