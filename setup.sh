@@ -1,11 +1,11 @@
 #!/bin/bash
 ###############################################################################
-# setup-configuration.sh
-# -----------------------
+# setup.sh
+# --------
 # Create symbolic links to configuration files.
-# usage: ./setup-configuration [-Abtv] <absolute_path_to_repo>
+# usage: ./setup [-Abtv] <absolute_path_to_repo>
 #
-# `steup-configuration` **options** (any combination of the following):
+# OPTIONS (any combination of the following):
 #   `-A`    (all configurations)
 #   `-b`    (Bash)
 #   `-t`    (tmux)
@@ -29,7 +29,7 @@ do
         b)bash_opt=1;;
         t)tmux_opt=1;;
         v)vim_opt=1;;
-        *)echo "usage: ./setup-configuration [-Abtv]";;
+        *)echo "usage: ./setup [-Abtv]";;
     esac
 done
 

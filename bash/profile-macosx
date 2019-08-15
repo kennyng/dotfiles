@@ -3,6 +3,7 @@
 # -------------------
 # ~/.profile: executed by command interpreter for login shells
 # Exports PATH and other environment variables on macOS.
+# Sets system-specific aliases.
 #
 ######################################################################
 
@@ -27,16 +28,31 @@ export EDITOR=vim
 #H=$(date +%H)
 #if (( 6 <= 10#$H && 10#$H < 18 )); then
 #     # Use light theme between 6AM and 6PM.
-#    base16_solarized-light
-#    base16_tomorrow
-#    base16_google-light
-#    base16_default-light
-#    base16_shapeshifter
-#    base16_harmonic16-light
+#    base16 solarized-light
+#    base16 tomorrow
+#    base16 google-light
+#    base16 default-light
+#    base16 shapeshifter
+#    base16 harmonic16-light
 #else
-#    base16_solarized-dark
-#    base16_eighties
-#    base16_railscasts
-#    base16_ocean
-#    base16_oceanicnext
+#    base16 solarized-dark
+#    base16 eighties
+#    base16 railscasts
+#    base16 ocean
+#    base16 oceanicnext
 #fi
+
+# Launch Finder
+alias finder='open -a Finder'
+# Launch Preview
+alias preview='open -a /Applications/Preview.app'
+# Launch Sublime Text
+alias sublime-text='open -a /Applications/Sublime Text.app'
+# Launch Dropbox
+alias dropbox='open -a /Applications/Dropbox.app'
+# Launch Safari
+alias safari='open -a /Applications/Safari.app'
+# Launch Firefox
+alias firefox='open -a /Applications/Firefox.app'
+# Launch Chrome
+alias chrome='open -a /Applications/Google Chrome.app'
